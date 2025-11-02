@@ -1,0 +1,33 @@
+
+PROJECT SUMMARY: Furniture-Themed Interactive Browser Game
+
+1. **Game Concept Overview**
+- Inspired by "Pac-Man", but reversed: you (the player) are the salesperson trying to catch customers who are wandering the showroom.
+- Each customer has an interest meter that grows based on where they spend time (e.g., bedroom section, living room, etc.)
+- Once you “catch” a customer, a mini challenge or objection-handling task pops up (like “Furniture Shuffle” or trivia questions).
+
+2. **Gameplay Elements**
+- Tasks must be balanced: if you neglect store duties (e.g., cleaning, restocking), customer volume or satisfaction drops next day.
+- “Mini screens” like in Papers, Please pop up when interacting with customers (reviewing tags, delivery requests, financing, etc.)
+- A leaderboard for employees/customers based on performance.
+- Gamified incentives: players unlock discounts, rewards, or content based on in-game performance.
+
+3. **Website & Branding**
+- Game hosted on AlphaOnlineS or Wolf brand’s main domain.
+- Use QR codes on merchandise (shirts, bookmarks, canvases) that link directly to the game.
+- “Play to Unlock” logic: beat puzzles to reveal furniture and unlock special deals or coupons.
+
+4. **Technical Setup**
+- Browser-based using HTML/CSS/JS (mobile-friendly).
+- Consider using a central web server to store user scores and data.
+- Link or embed the game directly into Shopify/Wolf site (no extra domain needed).
+- Avoid blockchain TLDs like .wolf for now due to accessibility issues.
+
+5. **Future Game Ideas (To Explore Later)**
+- Memory matching game with furniture pairs.
+- Jigsaw puzzle of room setups.
+- Spot-the-difference game.
+- Spin-the-wheel or trivia-based mini games.
+- Easter eggs tied to your other brands or stories (e.g., Reflect to Profect or 1000 Days of Poems).
+
+This summary was compiled to revisit and build out the interactive showroom game idea in the future.
