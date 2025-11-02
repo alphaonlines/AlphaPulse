@@ -2,9 +2,11 @@
 intent: "AlphaOS/WOLF directory integrity"
 owner: "Gemini"
 authority: "Operator"
-last_verified: "2025-11-02 18:45 UTC"
+last_verified: "2025-11-02 18:50 UTC"
 ---
-# SITREP
+# 03_SITREP.md
+
+Version: v1.0001 (2025-11-02 18:50 UTC)
 
 **Date:** 2025-11-02
 **Run ID:** AIHQ-001
@@ -23,3 +25,6 @@ None.
 Monitor subprojects; maintain corps integrity.
 
 [↗ View Tasks](02_TASKLIST.md)
+
+### Changelog
+- v1.0001 (2025-11-02): Standardized version and timestamps.
