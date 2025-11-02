@@ -1,4 +1,4 @@
----
+--- 
 intent: "AlphaOS/WOLF directory integrity"
 owner: "Gemini"
 authority: "Operator"
@@ -188,7 +188,7 @@ Version: v1.0001 (2025-11-01 16:00 UTC)
 
 ## &nbsp; - `sandbox: true`  
 
-## - SITREP AIHQ-001 delivered and acknowledged by MSgt (ack recorded).  
+## - SITREP AIHQ-001 delivered and acknowledged.  
 
 ## 
 
@@ -253,10 +253,9 @@ Version: v1.0001 (2025-11-01 16:00 UTC)
 ## 
 
 ## ---
-
 ### Custom Directives
 
-- **`corp standard` or `corp`**: When given this command, I will check the core files (00-08) for alignment and discrepancies, looking for anything that seems off. This is to ensure the integrity of the documentation system.
+- **T`corp standard` or `corp`**: When given this command, I will check the core files (00-08) for alignment and discrepancies, looking for anything that seems off. This is to ensure the integrity of the documentation system.
 
 ## ---
 
