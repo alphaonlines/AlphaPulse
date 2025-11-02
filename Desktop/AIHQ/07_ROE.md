@@ -2,7 +2,7 @@
 intent: "AlphaOS/WOLF directory integrity"
 owner: "Gemini"
 authority: "Operator"
-last_verified: "2025-11-02 05:45 UTC"
+last_verified: "2025-11-02 18:35 UTC"
 ---
 # 07_roe.md
 Version: v1.0

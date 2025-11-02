@@ -228,19 +228,27 @@ Version: v1.0001 (2025-11-01 16:00 UTC)
 
 ## 
 
+## - Utilize SHA256 hashes for file integrity and traceability.
+
+## &nbsp; - Hashes are stored in `08_INDEX.md` to verify file content against corruption or tampering.
+
+## &nbsp; - These hashes should be updated upon file commits to ensure accurate audit trails.
+
+##
+
 ## ---
 
-## 
+##
 
 ### Contacts & Escalation Path
 
 ## 
 
-## - **Primary:** MSgt Task — ops lead (listed in TASK_ORDER)  
+## - **Primary:** MSgt Task — ops lead (listed in TASK_ORDER)
 
-## - **Escalate to:** Capt. WOLFbot (this document’s author)  
+## - **Escalate to:** Capt. WOLFbot (this document’s author)
 
-## - **Final escalation:** Colonel (human)  
+## - **Final escalation:** Colonel (human)
 
 ## 
 
