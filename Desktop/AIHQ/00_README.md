@@ -37,4 +37,3 @@ WOLF AI Corps documentation hub. Maintains mission-ready docs for AIHQ and subpr
 - [x] 00–05 present
 - [x] 06_LOGS, 07_ROE, 08_INDEX present
 - [x] Version numbers aligned
-- [x] SITREP acknowledged by MSgt
