@@ -6,7 +6,7 @@ last_verified: "2025-11-02 18:35 UTC"
 ---
 # 00_readme.md
 
-Version: v1.0010 (2025-11-02 16:03 UTC)
+Version: v1.0012 (2025-11-02 19:50 UTC)
 
 ## Project Overview
 WOLF AI Corps documentation hub. Maintains mission-ready docs for AIHQ and subprojects (e.g., FD_game).
@@ -15,7 +15,34 @@ WOLF AI Corps documentation hub. Maintains mission-ready docs for AIHQ and subpr
 - FD_game: Furniture Distributors browser game. Docs in FD_game/ folder.
 
 - WOLFbot/WOLF-WEBSITE: WOLF website project. Docs in WOLFbot/Main/WOLF/WOLF-WEBSITE/ folder.
+
+- AlphaForge: Home server project. Docs in AlphaForge/ folder.
+
+- MCPForge: MCP learning project. Docs in MCPForge/ folder.
+
+## Top Priorities
+- Maintain corp standards across all subprojects
+- Monitor and update subproject docs
+- Ensure security and traceability
+
+## Non-negotiables
+- No credentials in repo
+- Escalate legal/ethical concerns immediately
+- Follow ROE for operations
+
+## Report-to
+Capt. WOLFbot
+
+## Deliverables
+- Mission-ready documentation hub
+- Aligned subproject docs
+- Updated SITREPs and task lists
+
 ## Change Log
+
+- v1.0012 (2025-11-02): Added MCPForge project. Rationale: MCP learning initiative.
+
+- v1.0011 (2025-11-02): Added AlphaForge project. Rationale: New home server initiative.
 
 - v1.0010 (2025-11-02): Audited filesystem; aligned subproject docs (renames, versions, changelogs in FD_game subs). Rationale: Corp standards across all subdirs.
 

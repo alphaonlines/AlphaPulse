@@ -264,5 +264,5 @@ Version: v1.0001 (2025-11-01 16:00 UTC)
 
 - v1.0001 (2025-11-01): Updated version format to SOP standard. Rationale: SITREP review and alignment.
 
-#### End of `gemini.md`
+#### End of `05_PERSONALITY.md`
 
