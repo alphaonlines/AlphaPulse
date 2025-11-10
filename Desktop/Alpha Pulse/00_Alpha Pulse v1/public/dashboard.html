@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alpha Pulse Dashboard</title>
+  <meta name="description" content="Alpha Pulse analytics dashboard for social media and business metrics">
+  <meta property="og:title" content="Alpha Pulse Dashboard">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="Analytics dashboard for social media and business metrics">
+  <link rel="preload" href="style.css" as="style">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="dashboard-container">
+    <nav class="sidebar" role="navigation" aria-label="Main navigation">
+      <div class="sidebar-header">
+        <h2>Alpha Pulse</h2>
+      </div>
+      <ul role="menubar">
+        <li role="none"><a href="dashboard.html" class="active" role="menuitem">Dashboard</a></li>
+        <li role="none"><a href="analytics.html" role="menuitem">Analytics</a></li>
+        <li role="none"><a href="reports.html" role="menuitem">Reports</a></li>
+        <li role="none"><a href="leaderboard.html" role="menuitem">Leaderboard</a></li>
+        <li role="none"><a href="settings.html" role="menuitem">Settings</a></li>
+      </ul>
+      
+      <div class="theme-switcher" role="group" aria-label="Theme switcher">
+        <span aria-hidden="true">🌙</span>
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle" aria-label="Toggle dark mode">
+          <span class="slider"></span>
+        </label>
+        <span aria-hidden="true">☀️</span>
+      </div>
+    </nav>
+    <main id="main-content" class="main-content">
+      <header class="dashboard-header">
+        <h1>Dashboard</h1>
+        <div class="refresh-indicator">
+          <span id="last-update" aria-live="polite">Last updated: Just now</span>
+          <button id="manual-refresh" class="refresh-btn" aria-label="Refresh dashboard data">🔄 Refresh</button>
+        </div>
+      </header>
+      <section class="card-grid" aria-label="Analytics metrics">
+        <!-- Instagram Card -->
+        <article class="card" data-platform="instagram">
+          <header>
+            <h3>Instagram</h3>
+          </header>
+          <div class="metric">
+            <span class="metric-value" id="ig-followers" aria-label="Instagram followers count">
+              <div class="skeleton skeleton-text"></div>
+            </span>
+            <span class="metric-label">Followers</span>
+            <div id="ig-error" class="error-message" style="display: none;" role="alert" aria-live="polite"></div>
+          </div>
+          <div class="skeleton skeleton-chart" id="ig-chart-skeleton" aria-hidden="true"></div>
+          <canvas id="ig-chart" style="display: none;" aria-label="Instagram followers chart"></canvas>
+          <button class="export-btn" onclick="exportData('instagram')" aria-label="Export Instagram data">📊 Export</button>
+        </article>
+        <!-- Google Card -->
+        <article class="card" data-platform="google">
+          <header>
+            <h3>Google</h3>
+          </header>
+          <div class="metric">
+            <span class="metric-value" id="google-reviews" aria-label="Google reviews count">
+              <div class="skeleton skeleton-text"></div>
+            </span>
+            <span class="metric-label">Reviews</span>
+            <div id="google-error" class="error-message" style="display: none;" role="alert" aria-live="polite"></div>
+          </div>
+          <div class="skeleton skeleton-chart" id="google-chart-skeleton" aria-hidden="true"></div>
+          <canvas id="google-chart" style="display: none;" aria-label="Google reviews chart"></canvas>
+          <button class="export-btn" onclick="exportData('google')" aria-label="Export Google data">📊 Export</button>
+        </article>
+        <!-- Facebook Card -->
+        <article class="card" data-platform="facebook">
+          <header>
+            <h3>Facebook</h3>
+          </header>
+          <div class="metric">
+            <span class="metric-value" id="fb-likes" aria-label="Facebook page likes count">
+              <div class="skeleton skeleton-text"></div>
+            </span>
+            <span class="metric-label">Page Likes</span>
+            <div id="fb-error" class="error-message" style="display: none;" role="alert" aria-live="polite"></div>
+          </div>
+          <div class="skeleton skeleton-chart" id="fb-chart-skeleton" aria-hidden="true"></div>
+          <canvas id="fb-chart" style="display: none;" aria-label="Facebook page likes chart"></canvas>
+          <button class="export-btn" onclick="exportData('facebook')" aria-label="Export Facebook data">📊 Export</button>
+        </article>
+        <!-- Website Visitors Card -->
+        <article class="card" data-platform="visitors">
+          <header>
+            <h3>Website Visitors</h3>
+          </header>
+          <div class="metric">
+            <span class="metric-value" id="visitors-total" aria-label="Total website visitors count">
+              <div class="skeleton skeleton-text"></div>
+            </span>
+            <span class="metric-label">Total Visitors</span>
+            <div id="visitors-error" class="error-message" style="display: none;" role="alert" aria-live="polite"></div>
+          </div>
+          <div class="skeleton skeleton-chart" id="visitors-chart-skeleton" aria-hidden="true"></div>
+          <canvas id="visitors-chart" style="display: none;" aria-label="Website visitors chart"></canvas>
+          <button class="export-btn" onclick="exportData('visitors')" aria-label="Export visitors data">📊 Export</button>
+        </article>
+        <!-- Online Sales Card -->
+        <article class="card" data-platform="sales">
+          <header>
+            <h3>Online Sales</h3>
+          </header>
+          <div class="metric">
+            <span class="metric-value" id="sales-revenue" aria-label="Total sales revenue">
+              <div class="skeleton skeleton-text"></div>
+            </span>
+            <span class="metric-label">Total Revenue</span>
+            <div id="sales-error" class="error-message" style="display: none;" role="alert" aria-live="polite"></div>
+          </div>
+          <div class="skeleton skeleton-chart" id="sales-chart-skeleton" aria-hidden="true"></div>
+          <canvas id="sales-chart" style="display: none;" aria-label="Sales revenue chart"></canvas>
+          <button class="export-btn" onclick="exportData('sales')" aria-label="Export sales data">📊 Export</button>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
