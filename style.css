@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 :root {
   --background: #1a1a1a;
   --surface: #2a2a2a;
@@ -17,6 +21,7 @@ body {
   margin: 0;
   line-height: 1.6;
   overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .page {
@@ -85,6 +90,12 @@ body {
   color: var(--on-primary);
 }
 
+.cta.active {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -148,23 +159,6 @@ body {
   margin-top: 1rem;
 }
 
-.qr-footer {
-  background-color: var(--surface);
-  padding: 2rem;
-  text-align: center;
-}
-
-.qr-footer-grid {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.qr-card img {
-  max-width: 150px;
-  margin-top: 1rem;
-}
-
 .top-link {
   display: inline-block;
   margin-top: 2rem;
@@ -200,5 +194,14 @@ body {
   max-width: 100% !important;
   width: 100% !important;
   display: block;
-  margin: 0 auto;
+  margin: 0 auto !important; /* Override inline margin and ensure centering */
+}
+
+#status-message {
+  background-color: var(--surface); /* Dark background */
+  color: var(--on-surface);
+  padding: 1rem;
+  margin-top: 2rem; /* Add some space from content above */
+  text-align: center;
+  border-radius: var(--border-radius);
 }
