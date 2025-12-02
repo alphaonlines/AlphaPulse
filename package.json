@@ -1,0 +1,19 @@
+{
+  "name": "alphapulse",
+  "version": "1.0.0",
+  "description": "AlphaPulse - Social Media Dashboard for Furniture Distributors",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 3000",
+    "build": "echo 'No build process needed - static files ready'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alphaonlines/AlphaPulse.git"
+  },
+  "keywords": ["social-media", "dashboard", "facebook", "instagram", "furniture"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {}
+}

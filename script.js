@@ -1,3 +1,13 @@
+// API Configuration - Replace with your actual credentials
+const API_CONFIG = {
+  FACEBOOK_ACCESS_TOKEN: 'EAAT33MwLWFQBQL8Lt9QyZAAXJU6sEvAZBdDaAga62oREMRYjsD0w3QgwktIzpWsHAXFgGFsNIB4F5OWrZCENYesFOx2U64f5viuWtc5yY6TuHoBLlyVeo3No3SHgy9HtzRE1sorEf3VxJZBe9kUnJPg8FlQZAGhK17XCNZCWysOvmn0AZCg8ZCNE3ScZAonkYf7sZA38YJZCcCX36XZAbX8YIgMQMyCssvAZCrZBYG4mh12mItl78iAxVWdgZDZD',
+  FACEBOOK_APP_ID: '281568812546439',
+  FACEBOOK_PAGE_ID: '95489941835',
+  INSTAGRAM_ACCESS_TOKEN: 'your_instagram_access_token_here',
+  INSTAGRAM_USER_ID: 'your_instagram_user_id_here',
+  REFRESH_INTERVAL: 300000 // 5 minutes
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // Animate stat counters
   const counters = document.querySelectorAll('.stat-value');
@@ -28,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
     lastUpdated.innerText = `Last updated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
   }
 
-
   // Helper function to manage loading states
   const setLoadingState = (sectionId, isLoading) => {
     const sectionElement = document.getElementById(sectionId);
@@ -39,10 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loadingIndicator.style.display = isLoading ? 'block' : 'none';
     }
 
-    // Clear content when loading starts, or populate when loading ends
-    // For simplicity, we'll clear the content area and let the fetch repopulate
     if (isLoading) {
-      // Clear relevant content based on sectionId
       if (sectionId === 'spotlight-card') {
         sectionElement.innerHTML = '<div class="loading-indicator">Loading Spotlight Post...</div>';
       } else if (sectionId === 'latest-grid') {
@@ -55,18 +61,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Facebook API Integration ---
   const fetchFacebookData = async () => {
-    // Show loading indicators before fetch
     setLoadingState('spotlight-card', true);
     setLoadingState('latest-grid', true);
-    setLoadingState('leaderboard-list', true); // Add loading for leaderboard
+    setLoadingState('leaderboard-list', true);
 
     try {
-      const response = await fetch('/api/facebook-data');
-      const data = await response.json();
-      const { pageInfo, postsData } = data;
+      // Fetch Page Fan Count (Followers)
+      const pageInfoResponse = await fetch(
+        `https://graph.facebook.com/v19.0/${API_CONFIG.FACEBOOK_PAGE_ID}?fields=fan_count&access_token=${API_CONFIG.FACEBOOK_ACCESS_TOKEN}`
+      );
+      const pageInfo = await pageInfoResponse.json();
 
-      // Hide loading for general Facebook data once fetched
-      // Specific sections will re-hide their loading as they are populated
+      // Fetch latest posts
+      const postsResponse = await fetch(
+        `https://graph.facebook.com/v19.0/${API_CONFIG.FACEBOOK_PAGE_ID}/posts?fields=message,created_time,shares,comments.summary(true),likes.summary(true),full_picture&access_token=${API_CONFIG.FACEBOOK_ACCESS_TOKEN}&limit=3`
+      );
+      const postsData = await postsResponse.json();
 
       if (pageInfo.fan_count) {
         const facebookFollowersElement = document.querySelector('#stat-facebook .stat-value');
@@ -89,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (postsData.data && postsData.data.length > 0) {
-        // Clear loading and populate Spotlight Card
+        // Populate Spotlight Card
         const spotlightCard = document.getElementById('spotlight-card');
         if (spotlightCard) {
           spotlightCard.innerHTML = `
@@ -113,10 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
           setLoadingState('spotlight-card', false);
         }
 
-        // Populate Latest Highlights with fetched posts
+        // Populate Latest Highlights
         const latestGrid = document.getElementById('latest-grid');
         if (latestGrid) {
-          latestGrid.innerHTML = ''; // Clear loading and existing content
+          latestGrid.innerHTML = '';
 
           postsData.data.forEach(post => {
             const postDate = new Date(post.created_time);
@@ -152,16 +162,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Populate Interaction Leaderboard
         const leaderboardList = document.getElementById('leaderboard-list');
         if (leaderboardList) {
-          leaderboardList.innerHTML = ''; // Clear loading and existing content
+          leaderboardList.innerHTML = '';
 
-          // Simple sorting by total interactions (likes + comments + shares)
           const sortedPosts = [...postsData.data].sort((a, b) => {
             const interactionsA = (a.likes ? a.likes.summary.total_count : 0) + (a.comments ? a.comments.summary.total_count : 0) + (a.shares ? a.shares.count : 0);
             const interactionsB = (b.likes ? b.likes.summary.total_count : 0) + (b.comments ? b.comments.summary.total_count : 0) + (b.shares ? b.shares.count : 0);
             return interactionsB - interactionsA;
           });
 
-          sortedPosts.slice(0, 3).forEach((post, index) => { // Top 3 posts
+          sortedPosts.slice(0, 3).forEach((post, index) => {
             const interactions = (post.likes ? post.likes.summary.total_count : 0) + (post.comments ? post.comments.summary.total_count : 0) + (post.shares ? post.shares.count : 0);
             const postDate = new Date(post.created_time);
             const timeAgo = (date) => {
@@ -203,10 +212,73 @@ document.addEventListener('DOMContentLoaded', () => {
       if (statusMessage) {
         statusMessage.innerText = 'Error fetching live data. Check console for details.';
       }
-      // Hide all loading indicators on error
       setLoadingState('spotlight-card', false);
       setLoadingState('latest-grid', false);
       setLoadingState('leaderboard-list', false);
+    }
+  };
+
+  // --- Instagram API Integration ---
+  const fetchInstagramData = async () => {
+    try {
+      // Fetch user profile and media
+      const userResponse = await fetch(
+        `https://graph.instagram.com/me?fields=id,username,account_type,media_count&access_token=${API_CONFIG.INSTAGRAM_ACCESS_TOKEN}`
+      );
+      const userData = await userResponse.json();
+
+      // Fetch recent media
+      const mediaResponse = await fetch(
+        `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,timestamp,like_count,comments_count&access_token=${API_CONFIG.INSTAGRAM_ACCESS_TOKEN}&limit=3`
+      );
+      const mediaData = await mediaResponse.json();
+
+      if (userData.media_count) {
+        const instagramFollowersElement = document.querySelector('#stat-instagram .stat-value');
+        if (instagramFollowersElement) {
+          // Note: Instagram doesn't provide follower count via Basic Display API
+          // Using media count as placeholder
+          instagramFollowersElement.setAttribute('data-count', userData.media_count);
+          const target = +userData.media_count;
+          let count = 0;
+          const updateCount = () => {
+            const inc = target / speed;
+            if (count < target) {
+              count += inc;
+              instagramFollowersElement.innerText = Math.ceil(count);
+              setTimeout(updateCount, 1);
+            } else {
+              instagramFollowersElement.innerText = target;
+            }
+          };
+          updateCount();
+        }
+      }
+
+      // Update Instagram sections with media data
+      if (mediaData.data && mediaData.data.length > 0) {
+        // Update Instagram embed section with latest post
+        const instagramEmbed = document.querySelector('.instagram-embed .embed-wrapper');
+        if (instagramEmbed) {
+          const latestPost = mediaData.data[0];
+          if (latestPost.media_type === 'IMAGE') {
+            instagramEmbed.innerHTML = `
+              <div class="instagram-post">
+                <img src="${latestPost.media_url}" alt="Instagram Post" style="max-width: 100%; border-radius: 8px;">
+                <p>${latestPost.caption || 'Instagram post from Furniture Distributors'}</p>
+                <div class="metric-row">
+                  <div class="metric">${latestPost.like_count || 0} Likes</div>
+                  <div class="metric">${latestPost.comments_count || 0} Comments</div>
+                </div>
+                <a href="${latestPost.permalink}" target="_blank">View on Instagram →</a>
+              </div>
+            `;
+          }
+        }
+      }
+
+    } catch (error) {
+      console.error('Error fetching Instagram data:', error);
     }
   };
 
@@ -214,8 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const socialMediaTabs = document.getElementById('social-media-tabs');
   const instagramTabButton = document.getElementById('cta-instagram-feed');
   const facebookTabButton = document.getElementById('cta-facebook-feed');
-  // tabSlider and moveSlider are no longer needed as styling is handled by CSS active states
-
 
   const instagramSections = [
     document.getElementById('stat-instagram'),
@@ -240,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
       activeButton.classList.add('active');
       toggleVisibility(sectionsToHide, false);
       toggleVisibility(sectionsToShow, true);
-      // moveSlider(activeButton); // No longer needed
       if (fetchData) {
         fetchFacebookData();
       }
@@ -249,6 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     instagramTabButton.addEventListener('click', (e) => {
       e.preventDefault();
       activateTab(instagramTabButton, facebookTabButton, instagramSections, facebookSections, false);
+      fetchInstagramData();
     });
 
     facebookTabButton.addEventListener('click', (e) => {
@@ -258,16 +328,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial state: show Instagram sections by default
     activateTab(instagramTabButton, facebookTabButton, instagramSections, facebookSections, false);
-
-    // Recalculate slider position on window resize - no longer needed
-    // window.addEventListener('resize', () => {
-    //   const activeButton = document.querySelector('.social-media-tabs .tab-button.active');
-    //   moveSlider(activeButton);
-    // });
+    fetchInstagramData();
   }
 
-  // Initial fetch for Facebook data (can be optimized if only fetched on demand)
-  // fetchFacebookData(); // Commented out to fetch only on demand via button click
+  // Auto-refresh data
+  setInterval(() => {
+    const activeTab = document.querySelector('.social-media-tabs .tab-button.active');
+    if (activeTab && activeTab.id === 'cta-facebook-feed') {
+      fetchFacebookData();
+    } else {
+      fetchInstagramData();
+    }
+    
+    // Update last updated timestamp
+    const lastUpdated = document.getElementById('last-updated');
+    if (lastUpdated) {
+      const now = new Date();
+      lastUpdated.innerText = `Last updated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+    }
+  }, API_CONFIG.REFRESH_INTERVAL);
 });
-
-
