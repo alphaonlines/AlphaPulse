@@ -1,0 +1,42 @@
+/* CSS Custom Properties (Variables) */
+:root {
+  /* Colors */
+  --background: #121212;
+  --surface: #1e1e1e;
+  --primary: #007bff;
+  --secondary: #03dac6;
+  --on-background: #e0e0e0;
+  --on-surface: #f0f0f0;
+  --on-primary: #ffffff;
+  --border-color: #333;
+  --shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  --border-radius: 12px;
+
+  /* Typography */
+  --font-size-base: 1rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1.125rem;
+  --font-size-lg: 1.5rem;
+  --font-size-xl: 2.5rem;
+  --font-size-xxl: 3.5rem;
+
+  --line-height-base: 1.6;
+  --heading-line-height: 1.2;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-xxl: 2.5rem;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Skeleton loading colors */
+  --skeleton-base: #333;
+  --skeleton-highlight: #444;
+}

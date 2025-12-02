@@ -1,0 +1,106 @@
+/* Typography Styles */
+h1 {
+  font-size: var(--font-size-xxl);
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+h2 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--on-surface);
+}
+
+h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--on-surface);
+}
+
+.eyebrow {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-sm);
+}
+
+.tagline {
+  font-size: var(--font-size-md);
+  color: var(--on-background);
+  opacity: 0.9;
+  margin-top: var(--spacing-sm);
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--on-background);
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-footnote {
+  font-size: var(--font-size-sm);
+  color: var(--on-background);
+  opacity: 0.7;
+  margin-top: var(--spacing-xs);
+}
+
+.post-timestamp {
+  font-size: var(--font-size-sm);
+  color: var(--on-background);
+  opacity: 0.6;
+  margin: var(--spacing-sm) 0;
+}
+
+.platform-pill {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-sm);
+}
+
+.metric {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--on-background);
+  opacity: 0.9;
+}
+
+.metric-row {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
+}
+
+.status {
+  font-size: var(--font-size-sm);
+  color: var(--on-background);
+  opacity: 0.7;
+  text-align: center;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  background-color: var(--surface);
+  margin-top: var(--spacing-lg);
+  transition: all var(--transition-normal);
+}
+
+.status.loading {
+  color: var(--secondary);
+  opacity: 1;
+}
+
+.status.error {
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  opacity: 1;
+}

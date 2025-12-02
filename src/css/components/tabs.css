@@ -1,0 +1,66 @@
+/* Tab Component Styles */
+.social-media-tabs {
+  display: flex;
+  position: relative;
+  background-color: var(--surface);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xs);
+  margin: var(--spacing-lg) 0;
+  border: 1px solid var(--border-color);
+}
+
+.tab-slider {
+  position: absolute;
+  height: calc(100% - 8px);
+  background-color: var(--primary);
+  border-radius: calc(var(--border-radius) - 2px);
+  transition: all var(--transition-normal);
+  top: 4px;
+  z-index: 0;
+}
+
+.tab-button {
+  flex: 1;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: none;
+  border: none;
+  color: var(--on-background);
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: calc(var(--border-radius) - 2px);
+}
+
+.tab-button:hover {
+  color: var(--on-surface);
+}
+
+.tab-button.active {
+  color: var(--on-primary);
+}
+
+/* Tab slider positioning */
+.social-media-tabs:has(#cta-instagram-feed.active) .tab-slider {
+  left: 4px;
+  width: calc(50% - 8px);
+}
+
+.social-media-tabs:has(#cta-facebook-feed.active) .tab-slider {
+  left: calc(50% + 4px);
+  width: calc(50% - 8px);
+}
+
+/* Fallback for browsers without :has() support */
+.tab-slider.instagram {
+  left: 4px;
+  width: calc(50% - 8px);
+}
+
+.tab-slider.facebook {
+  left: calc(50% + 4px);
+  width: calc(50% - 8px);
+}
