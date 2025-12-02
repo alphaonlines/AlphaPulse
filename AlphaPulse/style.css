@@ -1,0 +1,570 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --background: #121212; /* Darker background */
+  --surface: #1e1e1e;   /* Slightly lighter surface for cards */
+  --primary: #007bff;   /* Blue for primary actions */
+  --secondary: #03dac6;  /* Teal for accents (can be used later) */
+  --on-background: #e0e0e0; /* Light gray for text on dark background */
+  --on-surface: #f0f0f0;    /* White for text on surface */
+  --on-primary: #ffffff;   /* White for text on primary */
+  --border-color: #333;    /* Darker border color */
+  --shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+  --border-radius: 12px;  /* Slightly larger border radius */
+
+  /* Typography */
+  --font-size-base: 1rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1.125rem;
+  --font-size-lg: 1.5rem;
+  --font-size-xl: 2.5rem;
+  --font-size-xxl: 3.5rem;
+
+  --line-height-base: 1.6;
+  --heading-line-height: 1.2;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--on-background);
+  margin: 0;
+  line-height: var(--line-height-base);
+  overflow-x: hidden;
+  box-sizing: border-box;
+  font-size: var(--font-size-base);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  max-width: 1200px; /* Constrain width for better readability */
+  margin: 0 auto; /* Center content */
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 4rem; /* Increased margin */
+  padding: 2rem 0;
+}
+
+.hero .eyebrow {
+  font-size: var(--font-size-md);
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px; /* Increased letter spacing */
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.hero h1 {
+  font-size: var(--font-size-xxl); /* Larger heading */
+  line-height: var(--heading-line-height);
+  margin: 0.5rem 0 1rem; /* Adjusted margin */
+  font-weight: 700;
+}
+
+.hero .tagline {
+  font-size: var(--font-size-lg);
+  color: var(--on-surface);
+  max-width: 700px;
+  margin: 1rem auto 2rem; /* Adjusted margin */
+  font-weight: 400;
+}
+
+.cta-row {
+  /* This class is no longer used for the social media tabs, it's kept for other potential CTAs */
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/* New styles for the social media tabs */
+.social-media-tabs {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+  background-color: var(--surface);
+  border-radius: 50px;
+  padding: 0.5rem;
+  box-shadow: var(--shadow);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 1; /* Ensure tabs are above other content */
+}
+
+.tab-button {
+  padding: 0.7rem 1.5rem;
+  color: var(--on-surface);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  position: relative;
+  z-index: 2; /* Ensure text is above the slider */
+  background-color: transparent; /* Default for inactive */
+}
+
+.tab-button.active {
+  color: var(--on-primary);
+  background-color: var(--primary); /* Active state background */
+}
+
+/* No tab-slider styles needed anymore */
+
+.cta {
+  display: inline-flex; /* Use flex for alignment */
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary);
+  color: var(--on-primary);
+  padding: 0.9rem 1.8rem; /* Increased padding */
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease; /* Smooth transition for all properties */
+  border: 2px solid var(--primary); /* Consistent border */
+}
+
+.cta.ghost {
+  background-color: transparent;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.cta:hover {
+  background-color: #0056b3; /* Darker primary on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+  box-shadow: var(--shadow);
+}
+
+.cta.ghost:hover {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.cta.active {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+  box-shadow: var(--shadow); /* Active state also has shadow */
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted minmax */
+  gap: 2rem; /* Increased gap */
+  margin-top: 4rem; /* Increased margin */
+  padding: 0 1rem; /* Slight horizontal padding */
+}
+
+.stat-card {
+  background-color: var(--surface);
+  padding: 2rem; /* Increased padding */
+  border-radius: var(--border-radius);
+  text-align: center;
+  box-shadow: var(--shadow); /* Apply shadow to stat cards */
+  border: 1px solid var(--border-color); /* Subtle border */
+}
+
+.stat-label {
+  font-size: var(--font-size-md);
+  color: var(--on-surface);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: var(--font-size-xl); /* Larger stat value */
+  font-weight: 700;
+  margin: 0.5rem 0 1rem; /* Adjusted margin */
+  color: var(--primary); /* Highlight stat values */
+}
+
+.stat-footnote {
+  font-size: var(--font-size-sm);
+  color: #a0a0a0; /* Slightly lighter gray */
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem; /* Increased gap */
+  margin-top: 3rem;
+}
+
+.card {
+  background-color: var(--surface);
+  padding: 2.5rem; /* Increased padding for general cards */
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color); /* Consistent border */
+}
+
+.section-heading {
+  margin-bottom: 1.5rem; /* Space below heading */
+}
+
+.section-heading h2 {
+  font-size: var(--font-size-xl); /* Larger heading */
+  line-height: var(--heading-line-height);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--on-surface);
+}
+
+.section-heading p {
+  font-size: var(--font-size-md);
+  color: #b0b0b0; /* Lighter body text in heading */
+}
+
+.qr-panel {
+  background-color: var(--surface);
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color); /* Add border for separation */
+  box-shadow: var(--shadow);
+}
+
+.qr-panel h2 {
+  font-size: var(--font-size-lg);
+  margin-bottom: 1rem;
+  color: var(--on-surface);
+}
+
+.qr-panel p {
+  font-size: var(--font-size-base);
+  color: #b0b0b0;
+  margin-bottom: 1.5rem;
+}
+
+.qr-panel img {
+  max-width: 180px; /* Slightly larger QR code */
+  height: auto;
+  margin-top: 1rem;
+  border-radius: var(--border-radius);
+  border: 5px solid var(--on-surface); /* Border around QR */
+}
+
+.top-link {
+  display: inline-block;
+  margin-top: 2rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Specific card styles */
+.spotlight-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.spotlight-media img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.spotlight-content h3 {
+  font-size: var(--font-size-lg);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--on-surface);
+}
+
+.spotlight-content p {
+  font-size: var(--font-size-base);
+  color: #c0c0c0;
+  margin-bottom: 1rem;
+}
+
+.platform-pill {
+  display: inline-block;
+  background-color: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--font-size-sm);
+  padding: 0.3rem 0.7rem;
+  border-radius: 50px;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.platform-pill:hover {
+  background-color: var(--secondary); /* Change color on hover */
+  transform: translateY(-2px);
+}
+
+.metric-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  color: #a0a0a0;
+  font-size: var(--font-size-sm);
+}
+
+.spotlight-actions {
+  margin-top: 1.5rem;
+}
+
+.spotlight-actions a, .latest-card a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.spotlight-actions a:hover, .latest-card a:hover {
+  color: var(--secondary);
+  transform: translateX(5px); /* Slight movement on hover */
+}
+
+.latest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.latest-card {
+  background-color: var(--background); /* Slightly darker for nested cards */
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.latest-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.latest-card h3 {
+  font-size: var(--font-size-md);
+  margin-top: 0.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--on-surface);
+}
+
+.latest-card p {
+  font-size: var(--font-size-base);
+  color: #c0c0c0;
+  margin-bottom: 1rem;
+}
+
+.post-timestamp {
+  font-size: var(--font-size-sm);
+  color: #808080;
+  margin-bottom: 1rem;
+}
+
+.leaderboard-list {
+  list-style: none;
+  padding: 0;
+}
+
+.leaderboard-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease;
+}
+
+.leaderboard-item:hover {
+  background-color: rgba(0, 123, 255, 0.1); /* Subtle highlight on hover */
+}
+
+.leaderboard-item:last-child {
+  border-bottom: none;
+}
+
+.leaderboard-item strong {
+  color: var(--primary);
+  font-size: var(--font-size-md);
+}
+
+.leaderboard-item div {
+  color: var(--on-surface);
+}
+
+.leaderboard-meta {
+  text-align: right;
+}
+
+.leaderboard-meta small {
+  display: block;
+  color: #808080;
+  font-size: var(--font-size-sm);
+}
+
+
+/* Responsive */
+@media (max-width: 767px) {
+  .hero h1 {
+    font-size: var(--font-size-xl); /* Smaller heading for small screens */
+  }
+  .hero .tagline {
+    font-size: var(--font-size-base); /* Smaller tagline for small screens */
+  }
+  .section-heading h2 {
+    font-size: var(--font-size-lg); /* Smaller section heading for small screens */
+  }
+  .main-content {
+    padding: 1rem; /* Less padding on small screens */
+  }
+  .cta-row {
+    flex-direction: column; /* Stack CTAs vertically on small screens */
+    gap: 1rem;
+  }
+  .cta {
+    width: 100%; /* Full width buttons */
+  }
+}
+
+@media (min-width: 768px) {
+  .dashboard {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* More flexible grid */
+  }
+  .spotlight-card {
+    flex-direction: row; /* Horizontal layout for spotlight on larger screens */
+    text-align: left;
+  }
+  .spotlight-media {
+    flex: 1;
+    min-width: 40%;
+  }
+  .spotlight-content {
+    flex: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .qr-layout {
+    display: flex;
+    max-width: 1400px; /* Max width for the entire layout */
+    margin: 0 auto;
+    border-radius: var(--border-radius);
+    overflow: hidden; /* Ensure rounded corners clip children */
+    box-shadow: var(--shadow);
+  }
+  .qr-panel {
+    width: 300px; /* Wider QR panel */
+    flex-shrink: 0;
+    border-bottom: none; /* Remove bottom border if it's a column */
+    border-right: 1px solid var(--border-color); /* Add right border */
+  }
+  .main-content {
+    padding: 3rem; /* More padding for main content */
+  }
+  .dashboard {
+    grid-template-columns: 2fr 1fr; /* Two-column layout for dashboard */
+  }
+  .card.spotlight {
+    grid-column: 1 / 3; /* Spotlight spans full width */
+  }
+  .card.latest {
+    grid-column: 1 / 2; /* Latest highlights in first column */
+  }
+  .card.leaderboard {
+    grid-column: 2 / 3; /* Leaderboard in second column */
+    grid-row: 2 / 4; /* Span multiple rows if needed */
+  }
+  .card.community,
+  .card.instagram-embed {
+    grid-column: 1 / 2; /* Community and Instagram embeds in first column */
+  }
+}
+
+/* Embed responsiveness */
+.embed-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border-radius: var(--border-radius);
+}
+
+.embed-wrapper iframe,
+.embed-wrapper blockquote.instagram-media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+  display: block;
+  margin: 0 !important;
+}
+
+
+.loading-indicator {
+  text-align: center;
+  padding: 30px;
+  color: var(--primary);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  animation: pulse 1.5s infinite ease-in-out; /* Simple pulse animation */
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+
+#status-message {
+  background-color: var(--surface);
+  color: var(--on-surface);
+  padding: 1.5rem; /* Increased padding */
+  margin-top: 3rem; /* Increased margin */
+  text-align: center;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-md);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+/* Support ribbon styling */
+.support-ribbon {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  z-index: 1000;
+  font-weight: 600;
+  transition: transform 0.3s ease;
+}
+
+.support-ribbon:hover {
+  transform: translateY(-5px);
+}
+
