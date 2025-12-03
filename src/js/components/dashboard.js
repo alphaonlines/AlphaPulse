@@ -3,6 +3,7 @@ import { InstagramService } from '../services/instagram-service.js';
 import { CounterManager } from './stat-counter.js';
 import { LoadingStates } from './loading-states.js';
 import { TabSwitcher } from './tab-switcher.js';
+import { DataVisualization } from './data-visualization.js';
 import { timeFormatter, errorHandler } from '../utils/helpers.js';
 import { API_CONFIG } from '../config/api-config.js';
 
@@ -13,6 +14,7 @@ export class DashboardManager {
     this.counterManager = new CounterManager();
     this.loadingStates = new LoadingStates();
     this.tabSwitcher = new TabSwitcher();
+    this.dataViz = new DataVisualization();
     
     this.refreshInterval = null;
     this.isInitialized = false;
@@ -23,6 +25,8 @@ export class DashboardManager {
       // Initialize components
       this.counterManager.initialize();
       this.tabSwitcher.initialize();
+      this.dataViz.initialize();
+      this.dataViz.addInteractiveEffects();
       
       // Set up tab change callbacks
       this.tabSwitcher.onTabChange('instagram', () => this.loadInstagramData());
@@ -136,18 +140,29 @@ export class DashboardManager {
     spotlightCard.innerHTML = `
       <div class="spotlight-media">
         <img src="${post.full_picture || 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80'}" alt="Spotlight Post">
+        <div class="spotlight-overlay"></div>
       </div>
       <div class="spotlight-content">
         <span class="platform-pill">${platform}</span>
         <h3>Furniture Distributors</h3>
-        <p>${post.message || 'Latest update from Furniture Distributors.'}</p>
-        <div class="metric-row">
-          <div class="metric">${post.likes?.summary?.total_count || 0} Likes</div>
-          <div class="metric">${post.comments?.summary?.total_count || 0} Comments</div>
-          <div class="metric">${post.shares?.count || 0} Shares</div>
+        <p>${post.message || 'Discover the latest updates and stories from Furniture Distributors, your trusted partner in quality furniture solutions.'}</p>
+        <div class="latest-metrics">
+          <div class="metric">
+            <span>❤️</span>
+            <span>${post.likes?.summary?.total_count || 0}</span>
+          </div>
+          <div class="metric">
+            <span>💬</span>
+            <span>${post.comments?.summary?.total_count || 0}</span>
+          </div>
+          <div class="metric">
+            <span>🔄</span>
+            <span>${post.shares?.count || 0}</span>
+          </div>
         </div>
         <div class="spotlight-actions">
-          <a href="${this.facebookService.generatePostUrl(post.id)}" target="_blank">View Post →</a>
+          <a href="${this.facebookService.generatePostUrl(post.id)}" target="_blank" class="btn btn-primary">View Post</a>
+          <a href="#" class="btn btn-secondary">Share</a>
         </div>
       </div>
     `;
@@ -159,16 +174,35 @@ export class DashboardManager {
 
     latestGrid.innerHTML = '';
 
-    posts.forEach(post => {
+    posts.slice(0, 6).forEach(post => {
       const postDate = new Date(post.created_time);
+      const interactions = this.facebookService.calculateInteractions(post);
       const postElement = document.createElement('article');
       postElement.classList.add('latest-card');
       postElement.innerHTML = `
         <span class="platform-pill">${platform}</span>
         <h3>Furniture Distributors</h3>
-        <p>${post.message || 'Click to view post.'}</p>
-        <div class="post-timestamp">${timeFormatter.timeAgo(postDate)}</div>
-        <a href="${this.facebookService.generatePostUrl(post.id)}" target="_blank">View Post</a>
+        <p>${post.message || 'Discover the latest updates from Furniture Distributors.'}</p>
+        <div class="latest-media">
+          <img src="${post.full_picture || 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&q=80'}" alt="Post image">
+        </div>
+        <div class="latest-metrics">
+          <div class="metric">
+            <span>❤️</span>
+            <span>${post.likes?.summary?.total_count || 0}</span>
+          </div>
+          <div class="metric">
+            <span>💬</span>
+            <span>${post.comments?.summary?.total_count || 0}</span>
+          </div>
+          <div class="metric">
+            <span>🔄</span>
+            <span>${post.shares?.count || 0}</span>
+          </div>
+        </div>
+        <div class="spotlight-actions">
+          <a href="${this.facebookService.generatePostUrl(post.id)}" target="_blank" class="btn btn-primary">View Post</a>
+        </div>
       `;
       latestGrid.appendChild(postElement);
     });
@@ -186,20 +220,28 @@ export class DashboardManager {
       return interactionsB - interactionsA;
     });
 
-    sortedPosts.slice(0, 3).forEach((post, index) => {
+    sortedPosts.slice(0, 5).forEach((post, index) => {
       const interactions = this.facebookService.calculateInteractions(post);
       const postDate = new Date(post.created_time);
       
       const listItem = document.createElement('li');
       listItem.classList.add('leaderboard-item');
+      
+      // Determine rank class
+      let rankClass = 'default';
+      if (index === 0) rankClass = 'gold';
+      else if (index === 1) rankClass = 'silver';
+      else if (index === 2) rankClass = 'bronze';
+      
       listItem.innerHTML = `
-        <div>
-          <strong>#${index + 1} · Facebook</strong>
-          <div>${post.message ? post.message.substring(0, 50) + '...' : 'Post'}</div>
+        <div class="leaderboard-rank ${rankClass}">${index + 1}</div>
+        <div class="leaderboard-content">
+          <h4>${post.message ? post.message.substring(0, 60) + '...' : 'Furniture Distributors Post'}</h4>
+          <p>${timeFormatter.timeAgo(postDate)}</p>
         </div>
         <div class="leaderboard-meta">
-          <div>${interactions} interactions</div>
-          <small>${timeFormatter.timeAgo(postDate)}</small>
+          <div class="leaderboard-interactions">${interactions}</div>
+          <div class="leaderboard-platform">Facebook</div>
         </div>
       `;
       leaderboardList.appendChild(listItem);

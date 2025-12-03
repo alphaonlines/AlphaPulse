@@ -42,61 +42,82 @@
             <article class="stat-card" id="stat-instagram">
               <div class="stat-label">Instagram Followers</div>
               <div class="stat-value" data-count="314">0</div>
+              <div class="stat-trend">
+                <canvas id="instagram-trend" width="100" height="30"></canvas>
+                <span class="trend-indicator positive">+12%</span>
+              </div>
               <p class="stat-footnote">Posts and media count</p>
             </article>
             <article class="stat-card" id="stat-facebook">
               <div class="stat-label">Facebook Followers</div>
               <div class="stat-value" data-count="2400">0</div>
+              <div class="stat-trend">
+                <canvas id="facebook-trend" width="100" height="30"></canvas>
+                <span class="trend-indicator positive">+8%</span>
+              </div>
               <p class="stat-footnote">80+ reviews · 90% recommend</p>
             </article>
             <article class="stat-card total" id="stat-total">
               <div class="stat-label">Community Total</div>
               <div class="stat-value" data-count="2700">0</div>
+              <div class="stat-progress">
+                <div class="progress-ring">
+                  <canvas id="total-progress" width="60" height="60"></canvas>
+                  <span class="progress-text">75%</span>
+                </div>
+              </div>
               <p class="stat-footnote" id="last-updated"></p>
             </article>
           </div>
         </header>
 
         <main class="dashboard">
-          <section class="card spotlight">
-            <div class="section-heading">
-              <h2>Spotlight Post</h2>
-              <p>The freshest moment driving engagement right now.</p>
-            </div>
-            <div id="spotlight-card" class="spotlight-card">
-              <div class="loading-indicator">Loading Spotlight Post...</div>
-              <!-- Content will be dynamically loaded here -->
-            </div>
-          </section>
+          <div class="dashboard-grid">
+            <!-- Spotlight Section -->
+            <section class="card spotlight">
+              <div class="section-heading">
+                <h2>Spotlight Post</h2>
+                <p>The freshest moment driving engagement right now.</p>
+              </div>
+              <div id="spotlight-card" class="spotlight-card">
+                <div class="loading-indicator">Loading Spotlight Post...</div>
+                <!-- Content will be dynamically loaded here -->
+              </div>
+            </section>
 
-          <section class="card latest">
-            <div class="section-heading">
-              <h2>Latest Highlights</h2>
-              <p>Recent stories from Instagram and Facebook.</p>
-            </div>
-            <div id="latest-grid" class="latest-grid">
-              <div class="loading-indicator">Loading Latest Highlights...</div>
-              <!-- Content will be dynamically loaded here -->
-            </div>
-          </section>
+            <!-- Latest Highlights Section -->
+            <section class="card latest">
+              <div class="section-heading">
+                <h2>Latest Highlights</h2>
+                <p>Recent stories from Instagram and Facebook.</p>
+              </div>
+              <div id="latest-grid" class="latest-grid">
+                <div class="loading-indicator">Loading Latest Highlights...</div>
+                <!-- Content will be dynamically loaded here -->
+              </div>
+            </section>
 
-          <section class="card leaderboard">
-            <div class="section-heading">
-              <h2>Interaction Leaderboard</h2>
-              <p>Top performing posts from the last 24 hours.</p>
-            </div>
-            <ol id="leaderboard-list" class="leaderboard-list">
-              <li class="loading-indicator">Loading Interaction Leaderboard...</li>
-              <!-- Content will be dynamically loaded here -->
-            </ol>
-          </section>
+            <!-- Interaction Leaderboard Section -->
+            <section class="card leaderboard">
+              <div class="section-heading">
+                <h2>Interaction Leaderboard</h2>
+                <p>Top performing posts from the last 24 hours.</p>
+              </div>
+              <ol id="leaderboard-list" class="leaderboard-list">
+                <li class="loading-indicator">Loading Interaction Leaderboard...</li>
+                <!-- Content will be dynamically loaded here -->
+              </ol>
+            </section>
+          </div>
 
+          <!-- Community Spotlight Section -->
           <section class="card community">
             <div class="section-heading">
               <h2>Community Spotlight</h2>
               <p>Local partners shouting out Furniture Distributors.</p>
             </div>
-            <div class="embed-wrapper">
+            <div class="community-section">
+              <div class="embed-wrapper">
                 <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fhavelockchamber%2Fposts%2Fpfbid0nCGqrADjTVcuFoSXH2RHkTEqHCnNW9fVDGsqkBT5wYbco5tYWdyTJ1T4sa4QbNjcl&show_text=true&width=500" width="500" height="574" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
               </div>
               <div class="embed-wrapper">
@@ -105,13 +126,14 @@
             </div>
           </section>
 
+          <!-- Instagram Embed Section -->
           <section class="card instagram-embed">
             <div class="section-heading">
               <h2>Instagram Highlight</h2>
               <p>Tap the latest @furnituredistributorsnc post.</p>
             </div>
-            <div class="embed-wrapper">
-              <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DREycFPFJxb/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/p/DREycFPFJxb/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 ... [truncated]
+            <div class="embed-wrapper instagram">
+              <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DREycFPFJxb/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/p/DREycFPFJxb/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33 C548.797,33 554.983,39.185 554.983,47 C554.983,54.814 548.797,61 541,61 C533.203,61 527.017,54.814 527.017,47 C527.017,39.185 533.203,33 541,33 M570.82,37.331 C570.674,34.976 570.424,33.322 569.934,32.543 C569.445,31.764 568.629,31.514 566.275,31.368 C563.92,31.223 557.718,31.165 541,31.165 C524.283,31.165 518.08,31.223 515.725,31.368 C513.371,31.514 511.717,31.764 510.938,32.543 C510.159,33.322 509.909,34.976 509.763,37.331 C509.618,39.685 509.559,45.887 509.559,47 C509.559,48.113 509.618,54.315 509.763,56.669 C509.909,59.023 510.159,60.677 510.938,61.456 C511.717,62.236 513.371,62.486 515.725,62.632 C518.08,62.777 524.283,62.835 541,62.835 C557.718,62.835 563.92,62.777 566.275,62.632 C568.629,62.486 570.283,62.236 571.062,61.456 C571.841,60.677 572.091,59.023 572.237,56.669 C572.382,54.315 572.441,48.113 572.441,47 C572.441,45.887 572.382,39.685 572.237,37.331"></path></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div></div></a></blockquote>
             </div>
             <script async src="//www.instagram.com/embed.js"></script>
           </section>

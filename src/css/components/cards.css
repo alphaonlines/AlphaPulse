@@ -121,6 +121,69 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Data Visualization Elements */
+.stat-trend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin: var(--spacing-2) 0;
+  position: relative;
+  z-index: 2;
+}
+
+.stat-trend canvas {
+  max-width: 80px;
+  height: 30px;
+}
+
+.trend-indicator {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-full);
+  background: var(--gray-100);
+  color: var(--text-tertiary);
+}
+
+.trend-indicator.positive {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16A34A;
+}
+
+.trend-indicator.negative {
+  background: rgba(239, 68, 68, 0.1);
+  color: #DC2626;
+}
+
+.stat-progress {
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing-3) 0;
+  position: relative;
+  z-index: 2;
+}
+
+.progress-ring {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.progress-ring canvas {
+  transform: rotate(-90deg);
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-inverse);
+}
+
 /* Latest Cards */
 .latest-card {
   background: var(--surface);
@@ -425,6 +488,45 @@
   font-weight: var(--font-weight-semibold);
   margin-bottom: var(--spacing-3);
   color: var(--text-primary);
+}
+
+/* Platform Pills */
+.platform-pill {
+  display: inline-block;
+  padding: var(--spacing-1) var(--spacing-3);
+  background: var(--gray-100);
+  color: var(--text-tertiary);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-2);
+}
+
+.platform-pill.instagram {
+  background: linear-gradient(135deg, #E4405F, #F77737);
+  color: var(--text-inverse);
+}
+
+.platform-pill.facebook {
+  background: linear-gradient(135deg, #1877F2, #42A5F5);
+  color: var(--text-inverse);
+}
+
+/* Metric Rows */
+.metric-row {
+  display: flex;
+  gap: var(--spacing-4);
+  margin: var(--spacing-3) 0;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
 }
 
 /* Responsive Cards */
