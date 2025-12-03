@@ -1,48 +1,231 @@
-/* Button Component Styles */
-.tab-button {
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: none;
+/* Button Component Styles - AlphaPulse Redesign */
+
+/* Base Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3) var(--spacing-6);
   border: none;
-  color: var(--on-background);
-  font-size: var(--font-size-md);
-  font-weight: 500;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
   cursor: pointer;
   transition: all var(--transition-fast);
   position: relative;
-  border-radius: var(--border-radius);
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
 }
 
-.tab-button:hover {
-  color: var(--on-surface);
-  background-color: rgba(255, 255, 255, 0.05);
+.btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Button Variants */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--gray-50);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-accent:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--gray-50);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius);
+}
+
+.btn-lg {
+  padding: var(--spacing-4) var(--spacing-8);
+  font-size: var(--font-size-base);
+  border-radius: var(--radius-xl);
+}
+
+.btn-xl {
+  padding: var(--spacing-5) var(--spacing-10);
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-2xl);
+}
+
+/* Icon Buttons */
+.btn-icon {
+  padding: var(--spacing-3);
+  aspect-ratio: 1;
+  border-radius: var(--radius-full);
+}
+
+.btn-icon-sm {
+  padding: var(--spacing-2);
+  aspect-ratio: 1;
+}
+
+.btn-icon-lg {
+  padding: var(--spacing-4);
+  aspect-ratio: 1;
+}
+
+/* Tab Button (Specialized) */
+.tab-button {
+  background: transparent;
+  color: var(--text-tertiary);
+  border: none;
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  z-index: 2;
+  border-radius: var(--radius-full);
+}
+
+.tab-button:hover:not(.active) {
+  color: var(--text-primary);
+  background: rgba(44, 82, 130, 0.05);
 }
 
 .tab-button.active {
-  color: var(--on-primary);
-  background-color: var(--primary);
+  color: var(--text-inverse);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  box-shadow: var(--shadow-sm);
 }
 
 .tab-button:focus-visible {
-  outline: 2px solid var(--secondary);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
+  border-radius: var(--radius-full);
 }
 
+/* Retry Button */
 .retry-button {
-  padding: var(--spacing-sm) var(--spacing-lg);
-  background-color: var(--primary);
-  color: var(--on-primary);
-  border-radius: var(--border-radius);
-  font-weight: 500;
-  transition: background-color var(--transition-fast);
-  margin-top: var(--spacing-md);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: var(--text-inverse);
+  border: none;
+  padding: var(--spacing-3) var(--spacing-6);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--spacing-4);
 }
 
 .retry-button:hover {
-  background-color: var(--secondary);
-  color: var(--on-primary);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .retry-button:focus-visible {
-  outline: 2px solid var(--secondary);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+/* Loading State */
+.btn-loading {
+  color: transparent;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Button Groups */
+.btn-group {
+  display: inline-flex;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-group .btn {
+  border-radius: 0;
+  border-right: 1px solid var(--border-color);
+}
+
+.btn-group .btn:first-child {
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
+}
+
+.btn-group .btn:last-child {
+  border-top-right-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+  border-right: none;
+}
+
+.btn-group .btn:hover {
+  z-index: 1;
 }
