@@ -15,7 +15,8 @@ export class DashboardManager {
     this.loadingStates = new LoadingStates();
     this.tabSwitcher = new TabSwitcher();
     this.dataViz = new DataVisualization();
-    
+
+    this.latestPosts = [];
     this.refreshInterval = null;
     this.tabRotationInterval = null;
     this.isInitialized = false;
@@ -32,7 +33,7 @@ export class DashboardManager {
       // Set up tab change callbacks
       this.tabSwitcher.onTabChange('instagram', () => this.loadInstagramData());
       this.tabSwitcher.onTabChange('facebook', () => this.loadFacebookData());
-      
+
       // Load initial data
       await this.loadInitialData();
       
@@ -52,13 +53,7 @@ export class DashboardManager {
   }
 
   async loadInitialData() {
-    const currentPlatform = this.tabSwitcher.getCurrentPlatform();
-    
-    if (currentPlatform === 'instagram') {
-      await this.loadInstagramData();
-    } else {
-      await this.loadFacebookData();
-    }
+    await Promise.all([this.loadFacebookData(), this.loadInstagramData()]);
 
     this.setupTabRotation();
   }
@@ -93,7 +88,8 @@ export class DashboardManager {
       // Update sections if we have posts
       if (data.posts.length > 0) {
         this.updateSpotlightCard(data.posts[0], 'facebook');
-        this.updateLatestGrid(data.posts, 'facebook');
+        const facebookPosts = this.transformFacebookPosts(data.posts);
+        this.mergeLatestPosts(facebookPosts, 'facebook');
         this.updateLeaderboard(data.posts);
       }
 
@@ -116,6 +112,7 @@ export class DashboardManager {
 
     try {
       this.loadingStates.setGlobalLoading(true);
+      this.loadingStates.setLoadingState('latest-grid', true);
 
       const data = await this.instagramService.getAllData();
 
@@ -135,14 +132,16 @@ export class DashboardManager {
       // Update total community count
       this.updateTotalCount();
 
-      // Update Instagram embed section
+      // Update latest posts grid with Instagram media
       if (data.media.length > 0) {
-        this.updateInstagramEmbed(data.media[0]);
+        const instagramPosts = this.transformInstagramMedia(data.media);
+        this.mergeLatestPosts(instagramPosts, 'instagram');
       }
 
     } catch (error) {
       errorHandler.handle(error, 'Instagram data');
     } finally {
+      this.loadingStates.setLoadingState('latest-grid', false);
       this.loadingStates.setGlobalLoading(false, statusMessage);
     }
   }
@@ -184,46 +183,6 @@ export class DashboardManager {
     `;
   }
 
-  updateLatestGrid(posts, platform) {
-    const latestGrid = document.getElementById('latest-grid');
-    if (!latestGrid) return;
-
-    latestGrid.innerHTML = '';
-
-    posts.slice(0, 6).forEach(post => {
-      const postDate = new Date(post.created_time);
-      const interactions = this.facebookService.calculateInteractions(post);
-      const postElement = document.createElement('article');
-      postElement.classList.add('latest-card');
-      postElement.innerHTML = `
-        <span class="platform-pill">${platform}</span>
-        <h3>Furniture Distributors</h3>
-        <p>${post.message || 'Discover the latest updates from Furniture Distributors.'}</p>
-        <div class="latest-media">
-          <img src="${post.full_picture || 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&q=80'}" alt="Post image">
-        </div>
-        <div class="latest-metrics">
-          <div class="metric">
-            <span>❤️</span>
-            <span>${post.likes?.summary?.total_count || 0}</span>
-          </div>
-          <div class="metric">
-            <span>💬</span>
-            <span>${post.comments?.summary?.total_count || 0}</span>
-          </div>
-          <div class="metric">
-            <span>🔄</span>
-            <span>${post.shares?.count || 0}</span>
-          </div>
-        </div>
-        <div class="spotlight-actions">
-          <a href="${this.facebookService.generatePostUrl(post.id)}" target="_blank" class="btn btn-primary">View Post</a>
-        </div>
-      `;
-      latestGrid.appendChild(postElement);
-    });
-  }
-
   updateLeaderboard(posts) {
     const leaderboardList = document.getElementById('leaderboard-list');
     if (!leaderboardList) return;
@@ -262,23 +221,6 @@ export class DashboardManager {
       `;
       leaderboardList.appendChild(listItem);
     });
-  }
-
-  updateInstagramEmbed(media) {
-    const instagramEmbed = document.querySelector('.instagram-embed .embed-wrapper');
-    if (!instagramEmbed || media.media_type !== 'IMAGE') return;
-
-    instagramEmbed.innerHTML = `
-      <div class="instagram-post">
-        <img src="${media.media_url}" alt="Instagram Post" style="max-width: 100%; border-radius: 8px;">
-        <p>${media.caption || 'Instagram post from Furniture Distributors'}</p>
-        <div class="metric-row">
-          <div class="metric">${media.like_count || 0} Likes</div>
-          <div class="metric">${media.comments_count || 0} Comments</div>
-        </div>
-        <a href="${media.permalink}" target="_blank">View on Instagram →</a>
-      </div>
-    `;
   }
 
   updateTotalCount() {
@@ -403,5 +345,102 @@ export class DashboardManager {
     if (this.tabRotationInterval) {
       clearInterval(this.tabRotationInterval);
     }
+  }
+
+  transformFacebookPosts(posts) {
+    return posts.slice(0, 6).map(post => ({
+      id: post.id,
+      platform: 'facebook',
+      platformLabel: 'Facebook',
+      caption: post.message || 'Furniture Distributors update',
+      image: post.full_picture || 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80',
+      timestamp: post.created_time,
+      metrics: {
+        likes: post.likes?.summary?.total_count || 0,
+        comments: post.comments?.summary?.total_count || 0,
+        shares: post.shares?.count || 0
+      }
+    }));
+  }
+
+  transformInstagramMedia(mediaItems) {
+    return mediaItems
+      .filter(item => item.media_type === 'IMAGE' || item.media_type === 'CAROUSEL_ALBUM')
+      .slice(0, 6)
+      .map(item => ({
+        id: item.id,
+        platform: 'instagram',
+        platformLabel: 'Instagram',
+        caption: item.caption || 'Instagram highlight from Furniture Distributors',
+        image: item.media_url,
+        timestamp: item.timestamp,
+        metrics: {
+          likes: item.like_count || 0,
+          comments: item.comments_count || 0,
+          shares: null
+        }
+      }));
+  }
+
+  mergeLatestPosts(newPosts, platform) {
+    const filteredExisting = this.latestPosts.filter(post => post.platform !== platform);
+    this.latestPosts = [...filteredExisting, ...newPosts].sort(
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+    );
+
+    this.renderLatestPostsGrid();
+  }
+
+  renderLatestPostsGrid() {
+    const latestGrid = document.getElementById('latest-grid');
+    if (!latestGrid) return;
+
+    latestGrid.innerHTML = '';
+
+    const postsToRender = this.latestPosts.slice(0, 6);
+
+    if (!postsToRender.length) {
+      latestGrid.innerHTML = '<div class="loading-indicator">Awaiting new posts...</div>';
+      return;
+    }
+
+    postsToRender.forEach(post => {
+      const postDate = new Date(post.timestamp);
+      const card = document.createElement('article');
+      card.classList.add('latest-card');
+
+      const captionSnippet = post.caption.length > 140
+        ? `${post.caption.substring(0, 140)}...`
+        : post.caption;
+
+      card.innerHTML = `
+        <span class="platform-pill ${post.platform}">${post.platformLabel}</span>
+        <h3>Furniture Distributors</h3>
+        <p>${captionSnippet}</p>
+        <div class="latest-media">
+          <img src="${post.image}" alt="${post.platformLabel} post visual">
+        </div>
+        <div class="latest-meta">
+          <span class="latest-timestamp">${timeFormatter.timeAgo(postDate)}</span>
+        </div>
+        <div class="latest-metrics">
+          <div class="metric">
+            <span>❤️</span>
+            <span>${post.metrics.likes}</span>
+          </div>
+          <div class="metric">
+            <span>💬</span>
+            <span>${post.metrics.comments}</span>
+          </div>
+          ${post.metrics.shares !== null ? `
+          <div class="metric">
+            <span>🔄</span>
+            <span>${post.metrics.shares}</span>
+          </div>` : ''}
+        </div>
+      `;
+
+      latestGrid.appendChild(card);
+    });
   }
 }

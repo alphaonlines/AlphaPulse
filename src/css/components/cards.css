@@ -244,6 +244,7 @@
   overflow: hidden;
   margin-bottom: var(--spacing-4);
   background: var(--gray-100);
+  pointer-events: none;
 }
 
 .latest-card .latest-media img {
@@ -251,6 +252,7 @@
   height: 100%;
   object-fit: cover;
   transition: transform var(--transition-slow);
+  pointer-events: none;
 }
 
 .latest-card:hover .latest-media img {
@@ -268,6 +270,15 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-1);
+}
+
+.latest-card .latest-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-3);
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
 }
 
 /* Leaderboard Items */

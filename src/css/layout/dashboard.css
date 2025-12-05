@@ -154,6 +154,10 @@
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr);
 }
 
+.dashboard-grid.secondary-grid .latest-posts {
+  grid-column: 1 / -1;
+}
+
 .dashboard-grid .spotlight,
 .dashboard-grid.main-grid .spotlight {
   grid-column: 1 / -1;
@@ -171,44 +175,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
-}
-
-/* Community Section */
-.community-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-6);
-}
-
-.embed-wrapper {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-color-subtle);
-  transition: transform var(--transition-normal);
-}
-
-.embed-wrapper:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-}
-
-.embed-wrapper iframe {
-  width: 100%;
-  height: auto;
-  min-height: 400px;
-  border: none;
-}
-
-/* Instagram Embed Section */
-.instagram-embed {
-  text-align: center;
-}
-
-.embed-wrapper.instagram {
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 /* Status Message */
@@ -230,10 +196,10 @@
   }
 }
 
-@media (max-width: 768px) {
-  .hero {
-    padding: var(--spacing-6) var(--spacing-6) var(--spacing-4);
-  }
+  @media (max-width: 768px) {
+    .hero {
+      padding: var(--spacing-6) var(--spacing-6) var(--spacing-4);
+    }
   
   .hero-copy {
     margin-bottom: var(--spacing-6);
@@ -249,19 +215,14 @@
     gap: var(--spacing-6);
   }
   
-  .latest-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-4);
-  }
-  
-  .community-section {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-4);
-  }
-  
-  .social-media-tabs {
-    margin-top: var(--spacing-4);
-  }
+    .latest-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-4);
+    }
+
+    .social-media-tabs {
+      margin-top: var(--spacing-4);
+    }
   
   .tab-button {
     padding: var(--spacing-2) var(--spacing-4);
