@@ -47,13 +47,13 @@
 
         <div class="stats-grid" aria-live="polite">
           <article class="stat-card" id="stat-instagram">
-            <div class="stat-label">Instagram Posts</div>
-            <div class="stat-value" data-count="314">0</div>
+            <div class="stat-label">Instagram Followers</div>
+            <div class="stat-value" data-count="12500">0</div>
             <div class="stat-trend">
               <canvas id="instagram-trend" width="100" height="30"></canvas>
               <span class="trend-indicator positive">+12%</span>
             </div>
-            <p class="stat-footnote">Posts and media count</p>
+            <p class="stat-footnote">Follower reach · Posts &amp; mentions</p>
           </article>
           <article class="stat-card" id="stat-facebook">
             <div class="stat-label">Facebook Followers</div>
@@ -68,46 +68,87 @@
       </header>
 
       <main class="dashboard">
-          <div class="dashboard-grid main-grid">
-            <!-- Spotlight Section -->
-            <section class="card card-glass spotlight">
-              <div class="section-heading">
-                <h2>Spotlight Post</h2>
-                <p>The freshest moment driving engagement right now.</p>
-              </div>
-              <div id="spotlight-card" class="spotlight-card">
-                <div class="loading-indicator">Loading Spotlight Post...</div>
-                <!-- Content will be dynamically loaded here -->
-              </div>
-            </section>
-
-            <!-- Interaction Leaderboard Section -->
-            <section class="card card-glass leaderboard">
-              <div class="section-heading">
-                <h2>Interaction Leaderboard</h2>
-                <p>Top performing posts from the last 24 hours.</p>
-              </div>
-              <ol id="leaderboard-list" class="leaderboard-list">
-                <li class="loading-indicator">Loading Interaction Leaderboard...</li>
-                <!-- Content will be dynamically loaded here -->
-              </ol>
-            </section>
+        <section class="card card-glass engagement-overview collapsible" id="engagement-overview" data-collapsed="false">
+          <div class="section-header">
+            <div class="section-heading">
+              <h2>Engagement pulse</h2>
+              <p>Follower totals by platform with a quick view of daily likes.</p>
+            </div>
+            <button class="section-toggle" type="button" aria-expanded="true" aria-controls="engagement-content">
+              <span class="toggle-icon" aria-hidden="true">▾</span>
+              <span class="toggle-label">Hide</span>
+            </button>
           </div>
 
-          <div class="dashboard-grid secondary-grid">
-            <!-- Latest Posts Section -->
-            <section class="card card-glass latest-posts">
-              <div class="section-heading">
-                <h2>Latest Posts</h2>
-                <p>Fresh drops from Instagram and Facebook.</p>
+          <div class="collapsible-body" id="engagement-content">
+            <div class="insight-grid">
+              <article class="insight-pill split">
+                <div class="pill-label">Follower mix</div>
+                <div class="pill-bar">
+                  <div class="bar instagram" style="width: 50%"></div>
+                  <div class="bar facebook" style="width: 50%"></div>
+                </div>
+                <div class="pill-meta">
+                  <span>IG 50%</span>
+                  <span>FB 50%</span>
+                </div>
+              </article>
+
+              <article class="insight-pill">
+                <div class="pill-label">Total followers</div>
+                <div class="pill-value" id="follower-total">—</div>
+                <p class="pill-subtitle">Combined community</p>
+              </article>
+
+              <article class="insight-pill">
+                <div class="pill-label">Daily avg likes</div>
+                <div class="pill-value" id="likes-average">—</div>
+                <p class="pill-subtitle">Last 14 days</p>
+              </article>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-meta">
+                <div>
+                  <p class="eyebrow">Likes per day</p>
+                  <h3>Past 14 days</h3>
+                  <p class="chart-footnote">Combined Facebook + Instagram reactions</p>
+                </div>
+                <div class="chart-stats">
+                  <div class="metric-block">
+                    <span class="metric-label">Peak day</span>
+                    <span class="metric-value" id="likes-peak">—</span>
+                  </div>
+                  <div class="metric-block">
+                    <span class="metric-label">Latest day</span>
+                    <span class="metric-value" id="likes-latest">—</span>
+                  </div>
+                </div>
               </div>
-              <div id="latest-grid" class="latest-grid">
-                <div class="loading-indicator">Loading Latest Posts...</div>
-                <!-- Content will be dynamically loaded here -->
-              </div>
-            </section>
+              <canvas id="likes-trend" width="720" height="240" aria-label="Daily likes trend"></canvas>
+            </div>
           </div>
-        </main>
+        </section>
+
+        <section class="card card-glass latest-posts collapsible" data-collapsed="false">
+          <div class="section-header">
+            <div class="section-heading">
+              <h2>Latest Posts</h2>
+              <p>Fresh drops from Instagram and Facebook.</p>
+            </div>
+            <button class="section-toggle" type="button" aria-expanded="true" aria-controls="latest-content">
+              <span class="toggle-icon" aria-hidden="true">▾</span>
+              <span class="toggle-label">Hide</span>
+            </button>
+          </div>
+          <div id="latest-content" class="collapsible-body">
+            <div id="latest-grid" class="latest-grid">
+              <div class="loading-indicator">Loading Latest Posts...</div>
+              <!-- Content will be dynamically loaded here -->
+            </div>
+          </div>
+        </section>
+      </main>
 
         <div id="status-message" class="status" role="status" aria-live="polite">Live data active · Auto-refresh every 5 minutes</div>
       </div>

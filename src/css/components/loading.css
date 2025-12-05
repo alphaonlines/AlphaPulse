@@ -121,37 +121,8 @@
   margin-bottom: var(--spacing-2);
 }
 
-/* Spotlight Card Skeleton */
-.skeleton-spotlight {
-  background: var(--surface);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-color-subtle);
-}
-
-.skeleton-spotlight .skeleton-image {
-  height: 300px;
-  border-radius: 0;
-}
-
-.skeleton-spotlight .skeleton-content {
-  padding: var(--spacing-6);
-}
-
-.skeleton-spotlight .skeleton-title {
-  width: 85%;
-}
-
-.skeleton-spotlight .skeleton-paragraph {
-  width: 100%;
-}
-
-.skeleton-spotlight .skeleton-paragraph:last-child {
-  width: 65%;
-}
-
 /* Latest Card Skeleton */
+
 .skeleton-latest-card {
   background: var(--surface);
   border-radius: var(--radius-xl);
@@ -192,46 +163,8 @@
   width: 50px;
 }
 
-/* Leaderboard Item Skeleton */
-.skeleton-leaderboard-item {
-  background: var(--surface);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-5);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-color-subtle);
-  margin-bottom: var(--spacing-4);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.skeleton-leaderboard-item .skeleton-rank {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-full);
-  margin-right: var(--spacing-4);
-}
-
-.skeleton-leaderboard-item .skeleton-content {
-  flex: 1;
-}
-
-.skeleton-leaderboard-item .skeleton-title {
-  width: 60%;
-  margin-bottom: var(--spacing-2);
-}
-
-.skeleton-leaderboard-item .skeleton-metrics {
-  display: flex;
-  gap: var(--spacing-3);
-}
-
-.skeleton-leaderboard-item .skeleton-metric {
-  height: 0.875rem;
-  width: 40px;
-}
-
 /* Loading States */
+
 .loading {
   opacity: 0.6;
   pointer-events: none;
