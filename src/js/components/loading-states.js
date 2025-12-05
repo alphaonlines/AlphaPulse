@@ -81,14 +81,14 @@ export class LoadingStates {
     }
   }
 
-  setGlobalLoading(isLoading) {
+  setGlobalLoading(isLoading, message) {
     const statusElement = document.getElementById('status-message');
     if (statusElement) {
       if (isLoading) {
         statusElement.textContent = 'Loading data...';
         statusElement.classList.add('loading');
       } else {
-        statusElement.textContent = 'Live data active · Auto-refresh every 5 minutes';
+        statusElement.textContent = message || 'Live data active · Auto-refresh every 5 minutes';
         statusElement.classList.remove('loading');
       }
     }

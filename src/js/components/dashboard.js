@@ -64,6 +64,8 @@ export class DashboardManager {
   }
 
   async loadFacebookData() {
+    let statusMessage;
+
     try {
       this.loadingStates.setGlobalLoading(true);
       this.loadingStates.setLoadingState('spotlight-card', true);
@@ -71,7 +73,11 @@ export class DashboardManager {
       this.loadingStates.setLoadingState('leaderboard-list', true);
 
       const data = await this.facebookService.getAllData();
-      
+
+      if (data.isFallback) {
+        statusMessage = 'Demo mode: showing sample Facebook data';
+      }
+
       // Update follower count
       if (data.pageInfo.fan_count) {
         const facebookElement = document.querySelector('#stat-facebook .stat-value');
@@ -94,22 +100,28 @@ export class DashboardManager {
       this.loadingStates.setLoadingState('spotlight-card', false);
       this.loadingStates.setLoadingState('latest-grid', false);
       this.loadingStates.setLoadingState('leaderboard-list', false);
-      
+
     } catch (error) {
       errorHandler.handle(error, 'Facebook data');
       this.loadingStates.setErrorState('spotlight-card', 'Unable to load Facebook data');
       this.loadingStates.setErrorState('latest-grid', 'Unable to load Facebook posts');
       this.loadingStates.setErrorState('leaderboard-list', 'Unable to load Facebook interactions');
     } finally {
-      this.loadingStates.setGlobalLoading(false);
+      this.loadingStates.setGlobalLoading(false, statusMessage);
     }
   }
 
   async loadInstagramData() {
+    let statusMessage;
+
     try {
       this.loadingStates.setGlobalLoading(true);
 
       const data = await this.instagramService.getAllData();
+
+      if (data.isFallback) {
+        statusMessage = 'Demo mode: showing sample Instagram data';
+      }
       
       // Update media count (Instagram doesn't provide follower count via Basic Display API)
       if (data.userInfo.media_count) {
@@ -131,7 +143,7 @@ export class DashboardManager {
     } catch (error) {
       errorHandler.handle(error, 'Instagram data');
     } finally {
-      this.loadingStates.setGlobalLoading(false);
+      this.loadingStates.setGlobalLoading(false, statusMessage);
     }
   }
 

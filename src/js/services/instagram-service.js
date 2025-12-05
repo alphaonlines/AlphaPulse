@@ -4,6 +4,38 @@ export class InstagramService {
   constructor() {
     this.accessToken = API_CONFIG.INSTAGRAM_ACCESS_TOKEN;
     this.userId = API_CONFIG.INSTAGRAM_USER_ID;
+    this.hasCredentials = Boolean(this.accessToken && this.userId);
+
+    this.fallbackData = {
+      userInfo: {
+        id: 'demo-instagram-user',
+        username: 'furnituredistributorsnc',
+        account_type: 'BUSINESS',
+        media_count: 314
+      },
+      media: [
+        {
+          id: 'demo_media_1',
+          caption: 'Sunlit showroom mornings hit different ☀️ Come test out the new walnut dining sets.',
+          media_type: 'IMAGE',
+          media_url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80',
+          permalink: 'https://www.instagram.com/p/demo1',
+          timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+          like_count: 180,
+          comments_count: 22
+        },
+        {
+          id: 'demo_media_2',
+          caption: 'Layered textures and brass accents for a modern, cozy living room.',
+          media_type: 'IMAGE',
+          media_url: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80',
+          permalink: 'https://www.instagram.com/p/demo2',
+          timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+          like_count: 142,
+          comments_count: 18
+        }
+      ]
+    };
   }
 
   async getUserInfo() {
@@ -37,20 +69,39 @@ export class InstagramService {
   }
 
   async getAllData() {
+    if (!this.hasCredentials) {
+      console.warn('Instagram credentials missing; using fallback data.');
+      return {
+        ...this.cloneFallbackData(),
+        isFallback: true
+      };
+    }
+
     try {
       const [userInfo, mediaData] = await Promise.all([
         this.getUserInfo(),
         this.getMedia()
       ]);
-      
+
       return {
         userInfo,
-        media: mediaData.data || []
+        media: mediaData.data || [],
+        isFallback: false
       };
     } catch (error) {
-      console.error('Error fetching Instagram data:', error);
-      throw error;
+      console.warn('Falling back to sample Instagram data:', error);
+      return {
+        ...this.cloneFallbackData(),
+        isFallback: true
+      };
     }
+  }
+
+  cloneFallbackData() {
+    return {
+      userInfo: { ...this.fallbackData.userInfo },
+      media: this.fallbackData.media.map(item => ({ ...item }))
+    };
   }
 
   calculateTotalInteractions(media) {
