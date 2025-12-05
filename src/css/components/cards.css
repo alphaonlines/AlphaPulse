@@ -53,6 +53,50 @@
   -webkit-backdrop-filter: blur(12px);
 }
 
+/* Collapsible Sections */
+.collapsible .section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.section-toggle {
+  background: var(--gray-100);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2) var(--spacing-3);
+  font-weight: var(--font-weight-semibold);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.section-toggle:hover {
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.section-toggle .toggle-icon {
+  transition: transform var(--transition-normal);
+}
+
+.collapsible.is-collapsed .section-toggle .toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.collapsible .collapsible-body {
+  margin-top: var(--spacing-4);
+}
+
+.collapsible.is-collapsed .collapsible-body {
+  display: none;
+}
+
 /* Stat Cards */
 .stat-card {
   background: var(--surface);

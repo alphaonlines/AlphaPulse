@@ -39,6 +39,14 @@ export class InstagramService {
     };
   }
 
+  buildFallback(reason = 'unknown') {
+    return {
+      ...this.cloneFallbackData(),
+      isFallback: true,
+      fallbackReason: reason
+    };
+  }
+
   async getUserInfo() {
     try {
       const response = await fetch(API_ENDPOINTS.INSTAGRAM_USER(this.accessToken));
@@ -71,14 +79,12 @@ export class InstagramService {
 
   async getAllData() {
     if (!this.hasCredentials) {
-      console.warn('Instagram credentials missing; using fallback data.');
-      return {
-        ...this.cloneFallbackData(),
-        isFallback: true
-      };
+      console.warn('Instagram credentials missing; skipping live Graph API call and using fallback data.');
+      return this.buildFallback('missing-credentials');
     }
 
     try {
+      console.info('Fetching live Instagram data from Graph API...');
       const [userInfo, mediaData] = await Promise.all([
         this.getUserInfo(),
         this.getMedia()
@@ -87,14 +93,12 @@ export class InstagramService {
       return {
         userInfo,
         media: mediaData.data || [],
-        isFallback: false
+        isFallback: false,
+        fallbackReason: null
       };
     } catch (error) {
-      console.warn('Falling back to sample Instagram data:', error);
-      return {
-        ...this.cloneFallbackData(),
-        isFallback: true
-      };
+      console.warn('Falling back to sample Instagram data after API error:', error);
+      return this.buildFallback('api-error');
     }
   }
 

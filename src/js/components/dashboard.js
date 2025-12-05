@@ -4,6 +4,7 @@ import { CounterManager } from './stat-counter.js';
 import { LoadingStates } from './loading-states.js';
 import { TabSwitcher } from './tab-switcher.js';
 import { DataVisualization } from './data-visualization.js';
+import { CollapsibleSections } from './collapsible-sections.js';
 import { timeFormatter, errorHandler } from '../utils/helpers.js';
 import { API_CONFIG } from '../config/api-config.js';
 
@@ -15,12 +16,17 @@ export class DashboardManager {
     this.loadingStates = new LoadingStates();
     this.tabSwitcher = new TabSwitcher();
     this.dataViz = new DataVisualization();
+    this.collapsibleSections = new CollapsibleSections();
 
     this.latestPosts = [];
     this.facebookPostsRaw = [];
     this.instagramMediaRaw = [];
     this.likesHistory = [];
     this.likeWindowDays = 14;
+    this.dataStatus = {
+      facebook: 'Pending live fetch',
+      instagram: 'Pending live fetch'
+    };
     this.refreshInterval = null;
     this.tabRotationInterval = null;
     this.isInitialized = false;
@@ -33,6 +39,7 @@ export class DashboardManager {
       this.tabSwitcher.initialize();
       this.dataViz.initialize();
       this.dataViz.addInteractiveEffects();
+      this.collapsibleSections.initialize();
       
       // Set up tab change callbacks
       this.tabSwitcher.onTabChange('instagram', () => this.loadInstagramData());
@@ -47,6 +54,7 @@ export class DashboardManager {
       // Update timestamp
       this.updateTimestamp();
       this.updateEngagementRate();
+      this.updateStatusBanner();
       
       this.isInitialized = true;
       console.log('Dashboard initialized successfully');
@@ -63,17 +71,14 @@ export class DashboardManager {
   }
 
   async loadFacebookData() {
-    let statusMessage;
-
     try {
       this.loadingStates.setGlobalLoading(true);
       this.loadingStates.setLoadingState('latest-grid', true);
 
       const data = await this.facebookService.getAllData();
-
-      if (data.isFallback) {
-        statusMessage = 'Demo mode: showing sample Facebook data';
-      }
+      this.dataStatus.facebook = data.isFallback
+        ? this.describeFallback('facebook', data.fallbackReason)
+        : 'Live Graph API data';
 
       // Update follower count
       if (data.pageInfo.fan_count) {
@@ -101,25 +106,24 @@ export class DashboardManager {
 
     } catch (error) {
       errorHandler.handle(error, 'Facebook data');
+      this.dataStatus.facebook = 'Error contacting Facebook API';
       this.loadingStates.setErrorState('latest-grid', 'Unable to load Facebook posts');
     } finally {
-      this.loadingStates.setGlobalLoading(false, statusMessage);
+      this.loadingStates.setGlobalLoading(false);
+      this.updateStatusBanner();
     }
   }
 
   async loadInstagramData() {
-    let statusMessage;
-
     try {
       this.loadingStates.setGlobalLoading(true);
       this.loadingStates.setLoadingState('latest-grid', true);
 
       const data = await this.instagramService.getAllData();
+      this.dataStatus.instagram = data.isFallback
+        ? this.describeFallback('instagram', data.fallbackReason)
+        : 'Live Graph API data';
 
-      if (data.isFallback) {
-        statusMessage = 'Demo mode: showing sample Instagram data';
-      }
-      
       // Update follower count (fall back to media count if follower data is unavailable)
       const instagramFollowers = this.getInstagramFollowers(data.userInfo);
       const instagramElement = document.querySelector('#stat-instagram .stat-value');
@@ -143,9 +147,11 @@ export class DashboardManager {
 
     } catch (error) {
       errorHandler.handle(error, 'Instagram data');
+      this.dataStatus.instagram = 'Error contacting Instagram API';
     } finally {
       this.loadingStates.setLoadingState('latest-grid', false);
-      this.loadingStates.setGlobalLoading(false, statusMessage);
+      this.loadingStates.setGlobalLoading(false);
+      this.updateStatusBanner();
     }
   }
 
@@ -291,6 +297,42 @@ export class DashboardManager {
     const engagementPercent = Math.max(1, Math.min(99, Math.round((instagramCount / total) * 100)));
     engagementValueElement.textContent = `${engagementPercent}%`;
     engagementTrendElement.textContent = 'Live share of Instagram';
+  }
+
+  describeFallback(platform, reason) {
+    const platformLabel = platform === 'facebook' ? 'Facebook' : 'Instagram';
+
+    if (reason === 'missing-credentials') {
+      return `${platformLabel} demo data (add credentials to go live)`;
+    }
+
+    if (reason === 'api-error') {
+      return `${platformLabel} demo data (API error)`;
+    }
+
+    return `${platformLabel} demo data`;
+  }
+
+  composeStatusMessage() {
+    const parts = [];
+
+    if (this.dataStatus.facebook) {
+      parts.push(`Facebook: ${this.dataStatus.facebook}`);
+    }
+
+    if (this.dataStatus.instagram) {
+      parts.push(`Instagram: ${this.dataStatus.instagram}`);
+    }
+
+    const summary = parts.join(' · ');
+    return summary
+      ? `${summary} · Auto-refresh every 5 minutes`
+      : 'Live data active · Auto-refresh every 5 minutes';
+  }
+
+  updateStatusBanner() {
+    const message = this.composeStatusMessage();
+    this.loadingStates.setStatusMessage(message);
   }
 
   setupAutoRefresh() {

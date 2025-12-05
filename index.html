@@ -68,68 +68,84 @@
       </header>
 
       <main class="dashboard">
-        <section class="card card-glass engagement-overview" id="engagement-overview">
-          <div class="section-heading">
-            <h2>Engagement pulse</h2>
-            <p>Follower totals by platform with a quick view of daily likes.</p>
-          </div>
-
-          <div class="insight-grid">
-            <article class="insight-pill split">
-              <div class="pill-label">Follower mix</div>
-              <div class="pill-bar">
-                <div class="bar instagram" style="width: 50%"></div>
-                <div class="bar facebook" style="width: 50%"></div>
-              </div>
-              <div class="pill-meta">
-                <span>IG 50%</span>
-                <span>FB 50%</span>
-              </div>
-            </article>
-
-            <article class="insight-pill">
-              <div class="pill-label">Total followers</div>
-              <div class="pill-value" id="follower-total">—</div>
-              <p class="pill-subtitle">Combined community</p>
-            </article>
-
-            <article class="insight-pill">
-              <div class="pill-label">Daily avg likes</div>
-              <div class="pill-value" id="likes-average">—</div>
-              <p class="pill-subtitle">Last 14 days</p>
-            </article>
-          </div>
-
-          <div class="chart-card">
-            <div class="chart-meta">
-              <div>
-                <p class="eyebrow">Likes per day</p>
-                <h3>Past 14 days</h3>
-                <p class="chart-footnote">Combined Facebook + Instagram reactions</p>
-              </div>
-              <div class="chart-stats">
-                <div class="metric-block">
-                  <span class="metric-label">Peak day</span>
-                  <span class="metric-value" id="likes-peak">—</span>
-                </div>
-                <div class="metric-block">
-                  <span class="metric-label">Latest day</span>
-                  <span class="metric-value" id="likes-latest">—</span>
-                </div>
-              </div>
+        <section class="card card-glass engagement-overview collapsible" id="engagement-overview" data-collapsed="false">
+          <div class="section-header">
+            <div class="section-heading">
+              <h2>Engagement pulse</h2>
+              <p>Follower totals by platform with a quick view of daily likes.</p>
             </div>
-            <canvas id="likes-trend" width="720" height="240" aria-label="Daily likes trend"></canvas>
+            <button class="section-toggle" type="button" aria-expanded="true" aria-controls="engagement-content">
+              <span class="toggle-icon" aria-hidden="true">▾</span>
+              <span class="toggle-label">Hide</span>
+            </button>
+          </div>
+
+          <div class="collapsible-body" id="engagement-content">
+            <div class="insight-grid">
+              <article class="insight-pill split">
+                <div class="pill-label">Follower mix</div>
+                <div class="pill-bar">
+                  <div class="bar instagram" style="width: 50%"></div>
+                  <div class="bar facebook" style="width: 50%"></div>
+                </div>
+                <div class="pill-meta">
+                  <span>IG 50%</span>
+                  <span>FB 50%</span>
+                </div>
+              </article>
+
+              <article class="insight-pill">
+                <div class="pill-label">Total followers</div>
+                <div class="pill-value" id="follower-total">—</div>
+                <p class="pill-subtitle">Combined community</p>
+              </article>
+
+              <article class="insight-pill">
+                <div class="pill-label">Daily avg likes</div>
+                <div class="pill-value" id="likes-average">—</div>
+                <p class="pill-subtitle">Last 14 days</p>
+              </article>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-meta">
+                <div>
+                  <p class="eyebrow">Likes per day</p>
+                  <h3>Past 14 days</h3>
+                  <p class="chart-footnote">Combined Facebook + Instagram reactions</p>
+                </div>
+                <div class="chart-stats">
+                  <div class="metric-block">
+                    <span class="metric-label">Peak day</span>
+                    <span class="metric-value" id="likes-peak">—</span>
+                  </div>
+                  <div class="metric-block">
+                    <span class="metric-label">Latest day</span>
+                    <span class="metric-value" id="likes-latest">—</span>
+                  </div>
+                </div>
+              </div>
+              <canvas id="likes-trend" width="720" height="240" aria-label="Daily likes trend"></canvas>
+            </div>
           </div>
         </section>
 
-        <section class="card card-glass latest-posts">
-          <div class="section-heading">
-            <h2>Latest Posts</h2>
-            <p>Fresh drops from Instagram and Facebook.</p>
+        <section class="card card-glass latest-posts collapsible" data-collapsed="false">
+          <div class="section-header">
+            <div class="section-heading">
+              <h2>Latest Posts</h2>
+              <p>Fresh drops from Instagram and Facebook.</p>
+            </div>
+            <button class="section-toggle" type="button" aria-expanded="true" aria-controls="latest-content">
+              <span class="toggle-icon" aria-hidden="true">▾</span>
+              <span class="toggle-label">Hide</span>
+            </button>
           </div>
-          <div id="latest-grid" class="latest-grid">
-            <div class="loading-indicator">Loading Latest Posts...</div>
-            <!-- Content will be dynamically loaded here -->
+          <div id="latest-content" class="collapsible-body">
+            <div id="latest-grid" class="latest-grid">
+              <div class="loading-indicator">Loading Latest Posts...</div>
+              <!-- Content will be dynamically loaded here -->
+            </div>
           </div>
         </section>
       </main>

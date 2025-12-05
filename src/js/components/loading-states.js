@@ -7,6 +7,21 @@ export class LoadingStates {
     };
   }
 
+  setStatusMessage(message, isLoading = false) {
+    const statusElement = document.getElementById('status-message');
+    if (!statusElement) return;
+
+    if (message) {
+      statusElement.textContent = message;
+    }
+
+    if (isLoading) {
+      statusElement.classList.add('loading');
+    } else {
+      statusElement.classList.remove('loading');
+    }
+  }
+
   createLatestGridSkeleton() {
     let skeletons = '';
     for (let i = 0; i < 3; i++) {
@@ -39,15 +54,10 @@ export class LoadingStates {
   }
 
   setGlobalLoading(isLoading, message) {
-    const statusElement = document.getElementById('status-message');
-    if (statusElement) {
-      if (isLoading) {
-        statusElement.textContent = 'Loading data...';
-        statusElement.classList.add('loading');
-      } else {
-        statusElement.textContent = message || 'Live data active · Auto-refresh every 5 minutes';
-        statusElement.classList.remove('loading');
-      }
+    if (isLoading) {
+      this.setStatusMessage('Loading data...', true);
+    } else {
+      this.setStatusMessage(message || 'Live data active · Auto-refresh every 5 minutes');
     }
   }
 
