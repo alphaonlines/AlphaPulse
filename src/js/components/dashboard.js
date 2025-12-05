@@ -64,6 +64,8 @@ export class DashboardManager {
   }
 
   async loadFacebookData() {
+    let statusMessage;
+
     try {
       this.loadingStates.setGlobalLoading(true);
       this.loadingStates.setLoadingState('spotlight-card', true);
@@ -71,7 +73,11 @@ export class DashboardManager {
       this.loadingStates.setLoadingState('leaderboard-list', true);
 
       const data = await this.facebookService.getAllData();
-      
+
+      if (data.isFallback) {
+        statusMessage = 'Demo mode: showing sample Facebook data';
+      }
+
       // Update follower count
       if (data.pageInfo.fan_count) {
         const facebookElement = document.querySelector('#stat-facebook .stat-value');
@@ -94,22 +100,28 @@ export class DashboardManager {
       this.loadingStates.setLoadingState('spotlight-card', false);
       this.loadingStates.setLoadingState('latest-grid', false);
       this.loadingStates.setLoadingState('leaderboard-list', false);
-      
+
     } catch (error) {
       errorHandler.handle(error, 'Facebook data');
       this.loadingStates.setErrorState('spotlight-card', 'Unable to load Facebook data');
       this.loadingStates.setErrorState('latest-grid', 'Unable to load Facebook posts');
       this.loadingStates.setErrorState('leaderboard-list', 'Unable to load Facebook interactions');
     } finally {
-      this.loadingStates.setGlobalLoading(false);
+      this.loadingStates.setGlobalLoading(false, statusMessage);
     }
   }
 
   async loadInstagramData() {
+    let statusMessage;
+
     try {
       this.loadingStates.setGlobalLoading(true);
 
       const data = await this.instagramService.getAllData();
+
+      if (data.isFallback) {
+        statusMessage = 'Demo mode: showing sample Instagram data';
+      }
       
       // Update media count (Instagram doesn't provide follower count via Basic Display API)
       if (data.userInfo.media_count) {
@@ -131,7 +143,7 @@ export class DashboardManager {
     } catch (error) {
       errorHandler.handle(error, 'Instagram data');
     } finally {
-      this.loadingStates.setGlobalLoading(false);
+      this.loadingStates.setGlobalLoading(false, statusMessage);
     }
   }
 
@@ -273,7 +285,6 @@ export class DashboardManager {
     const instagramElement = document.querySelector('#stat-instagram .stat-value');
     const facebookElement = document.querySelector('#stat-facebook .stat-value');
     const totalElement = document.querySelector('#stat-total .stat-value');
-    const progressText = document.querySelector('#stat-total .progress-text');
 
     if (instagramElement && facebookElement && totalElement) {
       const instagramCount = parseInt(instagramElement.getAttribute('data-count')) || 0;
@@ -288,10 +299,6 @@ export class DashboardManager {
       // Update progress ring toward a simple community goal
       const COMMUNITY_GOAL = 3000;
       const progressPercent = Math.min(100, Math.round((total / COMMUNITY_GOAL) * 100));
-
-      if (progressText) {
-        progressText.textContent = `${progressPercent}%`;
-      }
 
       if (this.dataViz && this.dataViz.charts.has('total-progress')) {
         this.dataViz.animateValue('total-progress', progressPercent);
