@@ -10,59 +10,55 @@ A real-time social media dashboard for Furniture Distributors that displays live
 - **Responsive Design**: Works on desktop and mobile devices
 - **Auto-Refresh**: Data updates automatically every 5 minutes
 
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [npm](https://www.npmjs.com/)
+
 ## Setup Instructions
 
-### 1. Add Your API Credentials
+### 1. Clone the Repository
 
-Edit the `.env` file and replace the placeholder values with your actual API credentials:
+```bash
+git clone https://github.com/your-username/alphapulse.git
+cd alphapulse
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Create Environment File
+
+Create a `.env` file in the root of the project and add your API credentials.
+
+> **IMPORTANT:** You must prefix the environment variables with `VITE_` for them to be exposed to the client-side code.
 
 ```env
+# AlphaPulse API Credentials
+# -----------------------------
+# IMPORTANT: Replace the placeholder values below with your actual API keys and IDs.
+# You can get these from the developer portals of Facebook and Instagram.
+
 # Facebook API Credentials
-FACEBOOK_ACCESS_TOKEN=your_facebook_access_token_here
-FACEBOOK_PAGE_ID=your_facebook_page_id_here
+VITE_FACEBOOK_ACCESS_TOKEN="your_facebook_access_token_here"
+VITE_FACEBOOK_APP_ID="your_facebook_app_id_here"
+VITE_FACEBOOK_PAGE_ID="your_facebook_page_id_here"
 
 # Instagram API Credentials
-INSTAGRAM_ACCESS_TOKEN=your_instagram_access_token_here
-INSTAGRAM_USER_ID=your_instagram_user_id_here
-
-# Application Settings
-REFRESH_INTERVAL=300000
-NODE_ENV=development
+VITE_INSTAGRAM_ACCESS_TOKEN="your_instagram_access_token_here"
+VITE_INSTAGRAM_USER_ID="your_instagram_user_id_here"
 ```
 
-### 2. Update JavaScript Configuration
+### 4. Run the Application
 
-Edit the `API_CONFIG` object in `script.js` (lines 2-8) with your actual credentials:
-
-```javascript
-const API_CONFIG = {
-  FACEBOOK_ACCESS_TOKEN: 'your_facebook_access_token_here',
-  FACEBOOK_PAGE_ID: 'your_facebook_page_id_here',
-  INSTAGRAM_ACCESS_TOKEN: 'your_instagram_access_token_here',
-  INSTAGRAM_USER_ID: 'your_instagram_user_id_here',
-  REFRESH_INTERVAL: 300000 // 5 minutes
-};
-```
-
-### 3. Run the Application
-
-Since this is a client-side application, you can run it using any local web server:
-
-**Option 1: Python (Recommended)**
 ```bash
-python3 -m http.server 3000
+npm run dev
 ```
 
-**Option 2: Node.js (if you have http-server installed)**
-```bash
-npx http-server -p 3000
-```
-
-**Option 3: Live Server in VS Code**
-- Install the "Live Server" extension
-- Right-click `index.html` and select "Open with Live Server"
-
-Then open your browser and navigate to `http://localhost:3000`
+The application will be available at `http://localhost:5173`.
 
 ## API Setup
 
@@ -84,45 +80,46 @@ Then open your browser and navigate to `http://localhost:3000`
 
 ```
 AlphaPulse/
-├── index.html          # Main HTML file
-├── script.js           # JavaScript with API integrations
-├── style.css           # Styling
+├── src/
+│   ├── css/
+│   ├── js/
+│   │   ├── components/
+│   │   ├── config/
+│   │   ├── services/
+│   │   └── utils/
+│   └── main.js
 ├── .env                # Environment variables (API keys)
 ├── .gitignore          # Git ignore file
+├── index.html          # Main HTML file
 ├── package.json        # Project metadata
+├── vite.config.js      # Vite configuration
 └── README.md           # This file
 ```
-
-## Customization
-
-- **Refresh Interval**: Change `REFRESH_INTERVAL` in `.env` and `script.js` (in milliseconds)
-- **Styling**: Modify `style.css` to change colors, fonts, and layout
-- **API Endpoints**: Update API calls in `script.js` for different data fields
 
 ## Troubleshooting
 
 ### CORS Issues
-If you encounter CORS errors, use a local web server (see setup instructions) instead of opening the HTML file directly.
+If you encounter CORS errors, ensure you are running the application using `npm run dev` and not by opening the `index.html` file directly.
 
 ### API Errors
 - Check that your access tokens are valid and not expired
 - Ensure your Facebook Page ID is correct
 - Verify Instagram permissions are properly configured
+- Check the browser's developer console for more specific error messages.
 
 ### Data Not Loading
 - Open browser developer tools to check console for errors
-- Verify API credentials are correctly entered
+- Verify API credentials in your `.env` file are correct and prefixed with `VITE_`
 - Check network connectivity
 
 ## Deployment
 
-This application can be deployed to any static hosting service:
+This application can be deployed to any static hosting service that supports Vite builds:
 - Netlify
 - Vercel
 - GitHub Pages
-- AWS S3 + CloudFront
 
-Simply upload the files and ensure your environment variables are configured for production.
+You will need to configure your environment variables in the hosting provider's settings.
 
 ## License
 

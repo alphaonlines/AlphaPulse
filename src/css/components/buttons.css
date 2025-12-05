@@ -52,7 +52,7 @@
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--gray-50);
+  background: var(--gray-800);
   border-color: var(--primary);
   color: var(--primary);
   transform: translateY(-1px);
@@ -78,7 +78,7 @@
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background: var(--gray-50);
+  background: var(--gray-800);
   color: var(--text-primary);
   border-color: var(--border-color);
 }
@@ -136,7 +136,7 @@
 
 .tab-button:hover:not(.active) {
   color: var(--text-primary);
-  background: rgba(44, 82, 130, 0.05);
+  background: rgba(44, 82, 130, 0.1);
 }
 
 .tab-button.active {

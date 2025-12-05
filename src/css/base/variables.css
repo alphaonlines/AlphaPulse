@@ -1,11 +1,11 @@
 /* CSS Custom Properties (Variables) - AlphaPulse Redesign */
 :root {
   /* Color System - Modern Sophistication with Warmth */
-  --background-primary: #FAF7F0;
-  --background-secondary: #F5F2EA;
-  --surface: #FFFFFF;
-  --surface-elevated: #FFFFFF;
-  --surface-glass: rgba(255, 255, 255, 0.7);
+  --background-primary: #111827;
+  --background-secondary: #1F2937;
+  --surface: #1F2937;
+  --surface-elevated: #374151;
+  --surface-glass: rgba(31, 41, 55, 0.7);
   
   /* Brand Colors */
   --primary: #2C5282;
@@ -36,15 +36,15 @@
   --gray-900: #111827;
   
   /* Text Colors */
-  --text-primary: #1F2937;
-  --text-secondary: #4B5563;
-  --text-tertiary: #6B7280;
-  --text-inverse: #FFFFFF;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-tertiary: #9CA3AF;
+  --text-inverse: #111827;
   --text-accent: var(--primary);
   
   /* Border & Shadows */
-  --border-color: #E5E7EB;
-  --border-color-subtle: #F3F4F6;
+  --border-color: #374151;
+  --border-color-subtle: #1F2937;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -116,8 +116,8 @@
   --z-tooltip: 1070;
 
   /* Skeleton Loading Colors */
-  --skeleton-base: #F3F4F6;
-  --skeleton-highlight: #E5E7EB;
+  --skeleton-base: #1F2937;
+  --skeleton-highlight: #374151;
   
   /* Glass Effect */
   --glass-backdrop: blur(10px) saturate(180%);

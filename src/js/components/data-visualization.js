@@ -16,6 +16,12 @@ export class DataVisualization {
   }
 
   createTrendCharts() {
+    // Hero engagement trend
+    const engagementCanvas = document.getElementById('engagement-trend');
+    if (engagementCanvas) {
+      this.createMiniChart(engagementCanvas, [42, 48, 46, 53, 57, 61, 64, 68, 72, 75, 78, 82], this.colors.primary);
+    }
+
     // Instagram trend chart
     const instagramCanvas = document.getElementById('instagram-trend');
     if (instagramCanvas) {
@@ -103,7 +109,8 @@ export class DataVisualization {
   createProgressRings() {
     const progressCanvas = document.getElementById('total-progress');
     if (progressCanvas) {
-      this.createProgressRing(progressCanvas, 75, this.colors.primary);
+      // Initialize at 0%; DashboardManager will animate based on live data
+      this.createProgressRing(progressCanvas, 0, this.colors.primary);
     }
   }
 

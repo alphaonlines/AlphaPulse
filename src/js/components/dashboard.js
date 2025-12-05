@@ -17,6 +17,7 @@ export class DashboardManager {
     this.dataViz = new DataVisualization();
     
     this.refreshInterval = null;
+    this.tabRotationInterval = null;
     this.isInitialized = false;
   }
 
@@ -40,6 +41,7 @@ export class DashboardManager {
       
       // Update timestamp
       this.updateTimestamp();
+      this.updateEngagementRate();
       
       this.isInitialized = true;
       console.log('Dashboard initialized successfully');
@@ -57,6 +59,8 @@ export class DashboardManager {
     } else {
       await this.loadFacebookData();
     }
+
+    this.setupTabRotation();
   }
 
   async loadFacebookData() {
@@ -269,6 +273,7 @@ export class DashboardManager {
     const instagramElement = document.querySelector('#stat-instagram .stat-value');
     const facebookElement = document.querySelector('#stat-facebook .stat-value');
     const totalElement = document.querySelector('#stat-total .stat-value');
+    const progressText = document.querySelector('#stat-total .progress-text');
 
     if (instagramElement && facebookElement && totalElement) {
       const instagramCount = parseInt(instagramElement.getAttribute('data-count')) || 0;
@@ -277,7 +282,42 @@ export class DashboardManager {
       
       totalElement.setAttribute('data-count', total);
       this.counterManager.updateCounter(totalElement, total);
+
+      this.updatePlatformSplit(instagramCount, facebookCount);
+
+      // Update progress ring toward a simple community goal
+      const COMMUNITY_GOAL = 3000;
+      const progressPercent = Math.min(100, Math.round((total / COMMUNITY_GOAL) * 100));
+
+      if (progressText) {
+        progressText.textContent = `${progressPercent}%`;
+      }
+
+      if (this.dataViz && this.dataViz.charts.has('total-progress')) {
+        this.dataViz.animateValue('total-progress', progressPercent);
+      }
     }
+  }
+
+  updatePlatformSplit(instagramCount, facebookCount) {
+    const splitPill = document.querySelector('.insight-pill.split');
+    if (!splitPill) return;
+
+    const total = instagramCount + facebookCount;
+    if (!total) return;
+
+    const igPercent = Math.round((instagramCount / total) * 100);
+    const fbPercent = 100 - igPercent;
+
+    const igBar = splitPill.querySelector('.pill-bar .bar.instagram');
+    const fbBar = splitPill.querySelector('.pill-bar .bar.facebook');
+    const igLabel = splitPill.querySelector('.pill-meta span:nth-child(1)');
+    const fbLabel = splitPill.querySelector('.pill-meta span:nth-child(2)');
+
+    if (igBar) igBar.style.width = `${igPercent}%`;
+    if (fbBar) fbBar.style.width = `${fbPercent}%`;
+    if (igLabel) igLabel.textContent = `IG ${igPercent}%`;
+    if (fbLabel) fbLabel.textContent = `FB ${fbPercent}%`;
   }
 
   updateTimestamp() {
@@ -286,6 +326,32 @@ export class DashboardManager {
       const now = new Date();
       lastUpdated.innerText = `Last updated: ${timeFormatter.formatTimestamp(now)}`;
     }
+  }
+
+  updateEngagementRate() {
+    const engagementValueElement = document.querySelector('.metric-block .metric-value');
+    const engagementTrendElement = document.querySelector('.metric-block .metric-trend');
+    const instagramElement = document.querySelector('#stat-instagram .stat-value');
+    const facebookElement = document.querySelector('#stat-facebook .stat-value');
+
+    if (!engagementValueElement || !engagementTrendElement || !instagramElement || !facebookElement) {
+      return;
+    }
+
+    const instagramCount = parseInt(instagramElement.getAttribute('data-count')) || 0;
+    const facebookCount = parseInt(facebookElement.getAttribute('data-count')) || 0;
+    const total = instagramCount + facebookCount;
+
+    if (!total) {
+      engagementValueElement.textContent = '—';
+      engagementTrendElement.textContent = '';
+      return;
+    }
+
+    // Simple engagement proxy: ratio of Instagram posts to total community footprint
+    const engagementPercent = Math.max(1, Math.min(99, Math.round((instagramCount / total) * 100)));
+    engagementValueElement.textContent = `${engagementPercent}%`;
+    engagementTrendElement.textContent = 'Live share of Instagram';
   }
 
   setupAutoRefresh() {
@@ -305,12 +371,30 @@ export class DashboardManager {
       }
       
       this.updateTimestamp();
+      this.updateEngagementRate();
     }, API_CONFIG.REFRESH_INTERVAL);
+  }
+
+  setupTabRotation() {
+    const ROTATION_INTERVAL = 30000; // 30 seconds for kiosk mode
+
+    if (this.tabRotationInterval) {
+      clearInterval(this.tabRotationInterval);
+    }
+
+    this.tabRotationInterval = setInterval(() => {
+      const currentPlatform = this.tabSwitcher.getCurrentPlatform();
+      const nextPlatform = currentPlatform === 'instagram' ? 'facebook' : 'instagram';
+      this.tabSwitcher.switchToPlatform(nextPlatform);
+    }, ROTATION_INTERVAL);
   }
 
   destroy() {
     if (this.refreshInterval) {
       clearInterval(this.refreshInterval);
+    }
+    if (this.tabRotationInterval) {
+      clearInterval(this.tabRotationInterval);
     }
   }
 }

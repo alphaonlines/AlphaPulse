@@ -48,7 +48,7 @@
 }
 
 .card-glass:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(55, 65, 81, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -90,8 +90,8 @@
 .stat-card.total {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: var(--text-inverse);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 10px 30px rgba(44, 82, 130, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(44, 82, 130, 0.2);
 }
 
 .stat-card.total::after {
@@ -147,13 +147,13 @@
 }
 
 .trend-indicator.positive {
-  background: rgba(34, 197, 94, 0.1);
-  color: #16A34A;
+  background: rgba(34, 197, 94, 0.2);
+  color: #34D399;
 }
 
 .trend-indicator.negative {
-  background: rgba(239, 68, 68, 0.1);
-  color: #DC2626;
+  background: rgba(239, 68, 68, 0.2);
+  color: #F87171;
 }
 
 .stat-progress {
@@ -321,13 +321,13 @@
 
 .leaderboard-rank.gold {
   background: linear-gradient(135deg, var(--brass), #F4E4C1);
-  color: var(--text-primary);
+  color: #4B5563; /* a dark gray */
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
 }
 
 .leaderboard-rank.silver {
   background: linear-gradient(135deg, #C0C0C0, #E8E8E8);
-  color: var(--text-primary);
+  color: #4B5563; /* a dark gray */
   box-shadow: 0 4px 12px rgba(192, 192, 192, 0.3);
 }
 
@@ -338,8 +338,8 @@
 }
 
 .leaderboard-rank.default {
-  background: var(--gray-100);
-  color: var(--text-tertiary);
+  background: var(--gray-700);
+  color: var(--text-primary);
 }
 
 .leaderboard-content {
@@ -429,8 +429,8 @@
   bottom: 0;
   background: linear-gradient(180deg, 
     transparent 0%, 
-    rgba(0, 0, 0, 0.1) 50%, 
-    rgba(0, 0, 0, 0.3) 100%);
+    rgba(0, 0, 0, 0.4) 50%, 
+    rgba(0, 0, 0, 0.7) 100%);
   pointer-events: none;
 }
 

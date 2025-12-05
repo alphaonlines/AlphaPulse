@@ -44,7 +44,7 @@
 
 .tab-button:hover:not(.active) {
   color: var(--text-primary);
-  background: rgba(44, 82, 130, 0.05);
+  background: rgba(44, 82, 130, 0.1);
 }
 
 .tab-button.active {
@@ -152,7 +152,7 @@
 
 .tab-button.active .tab-indicator::before {
   opacity: 1;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
 }
 
 /* Responsive Tabs */

@@ -1,10 +1,17 @@
+// Resolve config from a runtime env object (env.js) when present,
+// falling back to Vite-style import.meta.env for local development.
+const ENV_SOURCE =
+  (typeof window !== 'undefined' && window.__ALPHAPULSE_ENV__) ||
+  (typeof import.meta !== 'undefined' && import.meta.env) ||
+  {};
+
 // API Configuration
 export const API_CONFIG = {
-  FACEBOOK_ACCESS_TOKEN: 'EAAT33MwLWFQBQL8Lt9QyZAAXJU6sEvAZBdDaAga62oREMRYjsD0w3QgwktIzpWsHAXFgGFsNIB4F5OWrZCENYesFOx2U64f5viuWtc5yY6TuHoBLlyVeo3No3SHgy9HtzRE1sorEf3VxJZBe9kUnJPg8FlQZAGhK17XCNZCWysOvmn0AZCg8ZCNE3ScZAonkYf7sZA38YJZCcCX36XZAbX8YIgMQMyCssvAZCrZBYG4mh12mItl78iAxVWdgZDZD',
-  FACEBOOK_APP_ID: '281568812546439',
-  FACEBOOK_PAGE_ID: '95489941835',
-  INSTAGRAM_ACCESS_TOKEN: 'your_instagram_access_token_here',
-  INSTAGRAM_USER_ID: 'your_instagram_user_id_here',
+  FACEBOOK_ACCESS_TOKEN: ENV_SOURCE.VITE_FACEBOOK_ACCESS_TOKEN,
+  FACEBOOK_APP_ID: ENV_SOURCE.VITE_FACEBOOK_APP_ID,
+  FACEBOOK_PAGE_ID: ENV_SOURCE.VITE_FACEBOOK_PAGE_ID,
+  INSTAGRAM_ACCESS_TOKEN: ENV_SOURCE.VITE_INSTAGRAM_ACCESS_TOKEN,
+  INSTAGRAM_USER_ID: ENV_SOURCE.VITE_INSTAGRAM_USER_ID,
   REFRESH_INTERVAL: 300000 // 5 minutes
 };
 
