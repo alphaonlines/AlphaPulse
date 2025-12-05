@@ -285,7 +285,6 @@ export class DashboardManager {
     const instagramElement = document.querySelector('#stat-instagram .stat-value');
     const facebookElement = document.querySelector('#stat-facebook .stat-value');
     const totalElement = document.querySelector('#stat-total .stat-value');
-    const progressText = document.querySelector('#stat-total .progress-text');
 
     if (instagramElement && facebookElement && totalElement) {
       const instagramCount = parseInt(instagramElement.getAttribute('data-count')) || 0;
@@ -300,10 +299,6 @@ export class DashboardManager {
       // Update progress ring toward a simple community goal
       const COMMUNITY_GOAL = 3000;
       const progressPercent = Math.min(100, Math.round((total / COMMUNITY_GOAL) * 100));
-
-      if (progressText) {
-        progressText.textContent = `${progressPercent}%`;
-      }
 
       if (this.dataViz && this.dataViz.charts.has('total-progress')) {
         this.dataViz.animateValue('total-progress', progressPercent);
