@@ -195,7 +195,16 @@
   <div class="sparkle-trail" aria-hidden="true"></div>
   <a class="support-ribbon" href="#qr-footer">Need the link? Scan the QR ↓</a>
 
-  <script src="env.js"></script>
+  <script>
+    // Inline API credentials for kiosk/static use
+    window.__ALPHAPULSE_ENV__ = {
+      VITE_FACEBOOK_ACCESS_TOKEN: "EAAT33MwLWFQBQPLyGK16QfNcG1BVRkgupvu5wlVq0yL84DFbA988Y5yQDFosEZAjBzZAOtZBj1wg6R7Wy5v37I7PAmXGauWPtZCZBvxJJxoFx1Y8auWeKxvHaYZCkFNT0RXIbYJeeRrf6X2Ei9tC6FnDwUUQ5IobMcFTV3DJmMFuuVLuQtWEPsd1XvJpshD6GitpMeDJKy99DxrVCgnppJEZCZCcVkbETQhethUA0SV8avOK12Oi3a9VyQZDZD",
+      VITE_FACEBOOK_APP_ID: "1398427595003988",
+      VITE_FACEBOOK_PAGE_ID: "95489941835",
+      VITE_INSTAGRAM_ACCESS_TOKEN: "IGAALsDGPA4sZABZAFlJM2VNWXE4eUpTUHJoVEhRbHphalUxZAFpaNU1NSllLTVNuc1hySmtYTW01R2R1Yldtb2RnYndJQjUwSndoSTQ1a0s3d2tkS0I1ZAEE0dzhzT3ZATb0FNQVZAEREN6TmNRTW5NZADJFWHI2ZA0lhQWdVeWlEZAmlYWQZDZD",
+      VITE_INSTAGRAM_USER_ID: "17841407136660336"
+    };
+  </script>
   <script type="module" src="src/js/main.js"></script>
 </body>
 </html>
