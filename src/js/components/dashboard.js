@@ -17,6 +17,10 @@ export class DashboardManager {
     this.dataViz = new DataVisualization();
 
     this.latestPosts = [];
+    this.facebookPostsRaw = [];
+    this.instagramMediaRaw = [];
+    this.likesHistory = [];
+    this.likeWindowDays = 14;
     this.refreshInterval = null;
     this.tabRotationInterval = null;
     this.isInitialized = false;
@@ -80,6 +84,8 @@ export class DashboardManager {
         }
       }
 
+      this.facebookPostsRaw = data.posts || [];
+
       // Update total community count
       this.updateTotalCount();
 
@@ -88,6 +94,8 @@ export class DashboardManager {
         const facebookPosts = this.transformFacebookPosts(data.posts);
         this.mergeLatestPosts(facebookPosts, 'facebook');
       }
+
+      this.refreshLikeHistory();
 
       this.loadingStates.setLoadingState('latest-grid', false);
 
@@ -112,14 +120,15 @@ export class DashboardManager {
         statusMessage = 'Demo mode: showing sample Instagram data';
       }
       
-      // Update media count (Instagram doesn't provide follower count via Basic Display API)
-      if (data.userInfo.media_count) {
-        const instagramElement = document.querySelector('#stat-instagram .stat-value');
-        if (instagramElement) {
-          instagramElement.setAttribute('data-count', data.userInfo.media_count);
-          this.counterManager.updateCounter(instagramElement, data.userInfo.media_count);
-        }
+      // Update follower count (fall back to media count if follower data is unavailable)
+      const instagramFollowers = this.getInstagramFollowers(data.userInfo);
+      const instagramElement = document.querySelector('#stat-instagram .stat-value');
+      if (instagramElement) {
+        instagramElement.setAttribute('data-count', instagramFollowers);
+        this.counterManager.updateCounter(instagramElement, instagramFollowers);
       }
+
+      this.instagramMediaRaw = data.media || [];
 
       // Update total community count
       this.updateTotalCount();
@@ -129,6 +138,8 @@ export class DashboardManager {
         const instagramPosts = this.transformInstagramMedia(data.media);
         this.mergeLatestPosts(instagramPosts, 'instagram');
       }
+
+      this.refreshLikeHistory();
 
     } catch (error) {
       errorHandler.handle(error, 'Instagram data');
@@ -142,14 +153,19 @@ export class DashboardManager {
     const instagramElement = document.querySelector('#stat-instagram .stat-value');
     const facebookElement = document.querySelector('#stat-facebook .stat-value');
     const totalElement = document.querySelector('#stat-total .stat-value');
+    const followerTotalElement = document.getElementById('follower-total');
 
     if (instagramElement && facebookElement && totalElement) {
       const instagramCount = parseInt(instagramElement.getAttribute('data-count')) || 0;
       const facebookCount = parseInt(facebookElement.getAttribute('data-count')) || 0;
       const total = instagramCount + facebookCount;
-      
+
       totalElement.setAttribute('data-count', total);
       this.counterManager.updateCounter(totalElement, total);
+
+      if (followerTotalElement) {
+        followerTotalElement.textContent = total.toLocaleString();
+      }
 
       this.updatePlatformSplit(instagramCount, facebookCount);
 
@@ -182,6 +198,65 @@ export class DashboardManager {
     if (fbBar) fbBar.style.width = `${fbPercent}%`;
     if (igLabel) igLabel.textContent = `IG ${igPercent}%`;
     if (fbLabel) fbLabel.textContent = `FB ${fbPercent}%`;
+  }
+
+  getInstagramFollowers(userInfo = {}) {
+    return userInfo.followers_count || userInfo.followers || userInfo.media_count || 0;
+  }
+
+  refreshLikeHistory() {
+    const now = new Date();
+    const dayMs = 24 * 60 * 60 * 1000;
+    const timeline = Array.from({ length: this.likeWindowDays }, () => 0);
+
+    const bucketLikes = (timestamp, likes) => {
+      if (!timestamp) return;
+      const dayDiff = Math.floor((now - new Date(timestamp)) / dayMs);
+
+      if (dayDiff >= 0 && dayDiff < this.likeWindowDays) {
+        const bucketIndex = this.likeWindowDays - 1 - dayDiff;
+        timeline[bucketIndex] += likes;
+      }
+    };
+
+    this.facebookPostsRaw.forEach(post => {
+      const likes = post.likes?.summary?.total_count || 0;
+      bucketLikes(post.created_time, likes);
+    });
+
+    this.instagramMediaRaw.forEach(media => {
+      const likes = media.like_count || 0;
+      bucketLikes(media.timestamp, likes);
+    });
+
+    this.likesHistory = timeline;
+    this.updateLikesSummary(timeline);
+    this.dataViz.renderLikesChart(timeline);
+  }
+
+  updateLikesSummary(timeline) {
+    if (!timeline.length) return;
+
+    const totalLikes = timeline.reduce((sum, value) => sum + value, 0);
+    const averageLikes = totalLikes / timeline.length;
+    const peakLikes = Math.max(...timeline);
+    const latestLikes = timeline[timeline.length - 1];
+
+    const averageElement = document.getElementById('likes-average');
+    const peakElement = document.getElementById('likes-peak');
+    const latestElement = document.getElementById('likes-latest');
+
+    if (averageElement) {
+      averageElement.textContent = averageLikes.toFixed(1);
+    }
+
+    if (peakElement) {
+      peakElement.textContent = peakLikes.toLocaleString();
+    }
+
+    if (latestElement) {
+      latestElement.textContent = latestLikes.toLocaleString();
+    }
   }
 
   updateTimestamp() {

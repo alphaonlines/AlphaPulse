@@ -13,6 +13,7 @@ export class DataVisualization {
   initialize() {
     this.createTrendCharts();
     this.createProgressRings();
+    this.renderLikesChart(Array(14).fill(0));
   }
 
   createTrendCharts() {
@@ -103,7 +104,7 @@ export class DataVisualization {
     ctx.stroke();
     
     // Store chart reference
-    this.charts.set(canvas.id, { ctx, data, color, width, height });
+    this.charts.set(canvas.id, { ctx, data, color, width, height, type: 'mini-line' });
   }
 
   createProgressRings() {
@@ -143,17 +144,25 @@ export class DataVisualization {
     ctx.stroke();
     
     // Store reference
-    this.charts.set(canvas.id, { ctx, percentage, color, centerX, centerY, radius, lineWidth });
+    this.charts.set(canvas.id, { ctx, percentage, color, centerX, centerY, radius, lineWidth, type: 'progress-ring' });
   }
 
   updateChart(canvasId, newData) {
     const chart = this.charts.get(canvasId);
     if (!chart) return;
-    
-    if (canvasId.includes('trend')) {
-      this.createMiniChart(chart.ctx.canvas, newData, chart.color);
-    } else if (canvasId.includes('progress')) {
-      this.createProgressRing(chart.ctx.canvas, newData, chart.color);
+
+    switch (chart.type) {
+      case 'mini-line':
+        this.createMiniChart(chart.ctx.canvas, newData, chart.color);
+        break;
+      case 'progress-ring':
+        this.createProgressRing(chart.ctx.canvas, newData, chart.color);
+        break;
+      case 'bar':
+        this.createBarChart(chart.ctx.canvas, newData, chart.color);
+        break;
+      default:
+        break;
     }
   }
 
@@ -198,5 +207,59 @@ export class DataVisualization {
         canvas.style.transform = 'scale(1)';
       });
     });
+  }
+
+  renderLikesChart(data) {
+    const likesCanvas = document.getElementById('likes-trend');
+    if (!likesCanvas) return;
+
+    if (this.charts.has(likesCanvas.id)) {
+      this.updateChart(likesCanvas.id, data);
+    } else {
+      this.createBarChart(likesCanvas, data, this.colors.accent);
+    }
+  }
+
+  createBarChart(canvas, data, color) {
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+
+    if (!data.length) return;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const max = Math.max(5, ...data);
+    const padding = 16;
+    const barWidth = (width - padding * 2) / data.length - 4;
+
+    // Draw baseline
+    ctx.beginPath();
+    ctx.moveTo(padding, height - padding);
+    ctx.lineTo(width - padding, height - padding);
+    ctx.strokeStyle = '#E5E7EB';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    data.forEach((value, index) => {
+      const x = padding + index * (barWidth + 4);
+      const barHeight = (value / max) * (height - padding * 2);
+      const y = height - padding - barHeight;
+
+      const gradient = ctx.createLinearGradient(0, y, 0, height - padding);
+      gradient.addColorStop(0, color);
+      gradient.addColorStop(1, color + '80');
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, y, barWidth, barHeight, 6);
+      } else {
+        ctx.rect(x, y, barWidth, barHeight);
+      }
+      ctx.fill();
+    });
+
+    this.charts.set(canvas.id, { ctx, data, color, width, height, type: 'bar' });
   }
 }

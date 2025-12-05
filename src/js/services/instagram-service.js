@@ -11,7 +11,8 @@ export class InstagramService {
         id: 'demo-instagram-user',
         username: 'furnituredistributorsnc',
         account_type: 'BUSINESS',
-        media_count: 314
+        media_count: 314,
+        followers_count: 12500
       },
       media: [
         {
