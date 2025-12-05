@@ -68,46 +68,17 @@
       </header>
 
       <main class="dashboard">
-          <div class="dashboard-grid main-grid">
-            <!-- Spotlight Section -->
-            <section class="card card-glass spotlight">
-              <div class="section-heading">
-                <h2>Spotlight Post</h2>
-                <p>The freshest moment driving engagement right now.</p>
-              </div>
-              <div id="spotlight-card" class="spotlight-card">
-                <div class="loading-indicator">Loading Spotlight Post...</div>
-                <!-- Content will be dynamically loaded here -->
-              </div>
-            </section>
-
-            <!-- Interaction Leaderboard Section -->
-            <section class="card card-glass leaderboard">
-              <div class="section-heading">
-                <h2>Interaction Leaderboard</h2>
-                <p>Top performing posts from the last 24 hours.</p>
-              </div>
-              <ol id="leaderboard-list" class="leaderboard-list">
-                <li class="loading-indicator">Loading Interaction Leaderboard...</li>
-                <!-- Content will be dynamically loaded here -->
-              </ol>
-            </section>
+        <section class="card card-glass latest-posts">
+          <div class="section-heading">
+            <h2>Latest Posts</h2>
+            <p>Fresh drops from Instagram and Facebook.</p>
           </div>
-
-          <div class="dashboard-grid secondary-grid">
-            <!-- Latest Posts Section -->
-            <section class="card card-glass latest-posts">
-              <div class="section-heading">
-                <h2>Latest Posts</h2>
-                <p>Fresh drops from Instagram and Facebook.</p>
-              </div>
-              <div id="latest-grid" class="latest-grid">
-                <div class="loading-indicator">Loading Latest Posts...</div>
-                <!-- Content will be dynamically loaded here -->
-              </div>
-            </section>
+          <div id="latest-grid" class="latest-grid">
+            <div class="loading-indicator">Loading Latest Posts...</div>
+            <!-- Content will be dynamically loaded here -->
           </div>
-        </main>
+        </section>
+      </main>
 
         <div id="status-message" class="status" role="status" aria-live="polite">Live data active · Auto-refresh every 5 minutes</div>
       </div>

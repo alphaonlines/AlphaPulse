@@ -63,9 +63,7 @@ export class DashboardManager {
 
     try {
       this.loadingStates.setGlobalLoading(true);
-      this.loadingStates.setLoadingState('spotlight-card', true);
       this.loadingStates.setLoadingState('latest-grid', true);
-      this.loadingStates.setLoadingState('leaderboard-list', true);
 
       const data = await this.facebookService.getAllData();
 
@@ -87,21 +85,15 @@ export class DashboardManager {
 
       // Update sections if we have posts
       if (data.posts.length > 0) {
-        this.updateSpotlightCard(data.posts[0], 'facebook');
         const facebookPosts = this.transformFacebookPosts(data.posts);
         this.mergeLatestPosts(facebookPosts, 'facebook');
-        this.updateLeaderboard(data.posts);
       }
 
-      this.loadingStates.setLoadingState('spotlight-card', false);
       this.loadingStates.setLoadingState('latest-grid', false);
-      this.loadingStates.setLoadingState('leaderboard-list', false);
 
     } catch (error) {
       errorHandler.handle(error, 'Facebook data');
-      this.loadingStates.setErrorState('spotlight-card', 'Unable to load Facebook data');
       this.loadingStates.setErrorState('latest-grid', 'Unable to load Facebook posts');
-      this.loadingStates.setErrorState('leaderboard-list', 'Unable to load Facebook interactions');
     } finally {
       this.loadingStates.setGlobalLoading(false, statusMessage);
     }
@@ -144,83 +136,6 @@ export class DashboardManager {
       this.loadingStates.setLoadingState('latest-grid', false);
       this.loadingStates.setGlobalLoading(false, statusMessage);
     }
-  }
-
-  updateSpotlightCard(post, platform) {
-    const spotlightCard = document.getElementById('spotlight-card');
-    if (!spotlightCard) return;
-
-    const interactions = this.facebookService.calculateInteractions(post);
-    
-    spotlightCard.innerHTML = `
-      <div class="spotlight-media">
-        <img src="${post.full_picture || 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80'}" alt="Spotlight Post">
-        <div class="spotlight-overlay"></div>
-      </div>
-      <div class="spotlight-content">
-        <span class="platform-pill">${platform}</span>
-        <h3>Furniture Distributors</h3>
-        <p>${post.message || 'Discover the latest updates and stories from Furniture Distributors, your trusted partner in quality furniture solutions.'}</p>
-        <div class="latest-metrics">
-          <div class="metric">
-            <span>❤️</span>
-            <span>${post.likes?.summary?.total_count || 0}</span>
-          </div>
-          <div class="metric">
-            <span>💬</span>
-            <span>${post.comments?.summary?.total_count || 0}</span>
-          </div>
-          <div class="metric">
-            <span>🔄</span>
-            <span>${post.shares?.count || 0}</span>
-          </div>
-        </div>
-        <div class="spotlight-actions">
-          <a href="${this.facebookService.generatePostUrl(post.id)}" target="_blank" class="btn btn-primary">View Post</a>
-          <a href="#" class="btn btn-secondary">Share</a>
-        </div>
-      </div>
-    `;
-  }
-
-  updateLeaderboard(posts) {
-    const leaderboardList = document.getElementById('leaderboard-list');
-    if (!leaderboardList) return;
-
-    leaderboardList.innerHTML = '';
-
-    const sortedPosts = [...posts].sort((a, b) => {
-      const interactionsA = this.facebookService.calculateInteractions(a);
-      const interactionsB = this.facebookService.calculateInteractions(b);
-      return interactionsB - interactionsA;
-    });
-
-    sortedPosts.slice(0, 5).forEach((post, index) => {
-      const interactions = this.facebookService.calculateInteractions(post);
-      const postDate = new Date(post.created_time);
-      
-      const listItem = document.createElement('li');
-      listItem.classList.add('leaderboard-item');
-      
-      // Determine rank class
-      let rankClass = 'default';
-      if (index === 0) rankClass = 'gold';
-      else if (index === 1) rankClass = 'silver';
-      else if (index === 2) rankClass = 'bronze';
-      
-      listItem.innerHTML = `
-        <div class="leaderboard-rank ${rankClass}">${index + 1}</div>
-        <div class="leaderboard-content">
-          <h4>${post.message ? post.message.substring(0, 60) + '...' : 'Furniture Distributors Post'}</h4>
-          <p>${timeFormatter.timeAgo(postDate)}</p>
-        </div>
-        <div class="leaderboard-meta">
-          <div class="leaderboard-interactions">${interactions}</div>
-          <div class="leaderboard-platform">Facebook</div>
-        </div>
-      `;
-      leaderboardList.appendChild(listItem);
-    });
   }
 
   updateTotalCount() {
