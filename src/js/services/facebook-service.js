@@ -43,6 +43,14 @@ export class FacebookService {
     };
   }
 
+  buildFallback(reason = 'unknown') {
+    return {
+      ...this.cloneFallbackData(),
+      isFallback: true,
+      fallbackReason: reason
+    };
+  }
+
   async getPageInfo() {
     try {
       const response = await fetch(API_ENDPOINTS.FACEBOOK_PAGE_INFO(this.pageId, this.accessToken));
@@ -75,14 +83,12 @@ export class FacebookService {
 
   async getAllData() {
     if (!this.hasCredentials) {
-      console.warn('Facebook credentials missing; using fallback data.');
-      return {
-        ...this.cloneFallbackData(),
-        isFallback: true
-      };
+      console.warn('Facebook credentials missing; skipping live Graph API call and using fallback data.');
+      return this.buildFallback('missing-credentials');
     }
 
     try {
+      console.info('Fetching live Facebook data from Graph API...');
       const [pageInfo, postsData] = await Promise.all([
         this.getPageInfo(),
         this.getPosts()
@@ -91,14 +97,12 @@ export class FacebookService {
       return {
         pageInfo,
         posts: postsData.data || [],
-        isFallback: false
+        isFallback: false,
+        fallbackReason: null
       };
     } catch (error) {
-      console.warn('Falling back to sample Facebook data:', error);
-      return {
-        ...this.cloneFallbackData(),
-        isFallback: true
-      };
+      console.warn('Falling back to sample Facebook data after API error:', error);
+      return this.buildFallback('api-error');
     }
   }
 
