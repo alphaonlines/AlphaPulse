@@ -55,21 +55,21 @@ body::before {
 
 /* QR Layout - Modern Side Panel */
 .qr-layout {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: var(--spacing-8);
-  align-items: start;
+  display: block;
 }
 
 .qr-panel {
-  background: var(--surface);
+  background: linear-gradient(145deg, rgba(44, 82, 130, 0.14), rgba(113, 128, 150, 0.18));
   border-radius: var(--radius-2xl);
   padding: var(--spacing-6);
   box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-color-subtle);
-  position: sticky;
-  top: var(--spacing-6);
+  border: 1px solid var(--border-color);
+  position: relative;
+  top: auto;
   text-align: center;
+  display: grid;
+  gap: var(--spacing-4);
+  justify-items: center;
 }
 
 .qr-panel h2 {

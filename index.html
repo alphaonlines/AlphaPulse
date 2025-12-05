@@ -18,91 +18,15 @@
   </noscript>
 
   <div class="page">
-    <div class="qr-layout">
-      <aside class="qr-panel">
-        <h2>Scan to Connect</h2>
-        <p>Scan this QR code to access our social media connect page.</p>
-        <img src="https://fwaimages.blob.core.windows.net/s36/homepage/qrcode_www.furnituredistributors.net.png" alt="Unified QR code for Furniture Distributors connect page">
-
-      </aside>
-
-      <div class="main-content">
-        <header class="hero">
-          <div class="hero-grid">
-            <div class="hero-copy">
-              <p class="eyebrow">AlphaPulse for Furniture Distributors</p>
-              <h1>Stay in sync with our social momentum</h1>
-              <p class="tagline">Live follower counts, spotlight stories, and interaction leaders updated in real time.</p>
-              <div class="hero-meta">
-                <span class="meta-pill">Live data stream</span>
-                <span class="meta-pill">Auto-refresh · 5 min cadence</span>
-              </div>
-              <div id="social-media-tabs" class="social-media-tabs">
-                <a id="cta-instagram-feed" class="tab-button active" href="javascript:void(0);">Instagram</a>
-                <a id="cta-facebook-feed" class="tab-button" href="javascript:void(0);">Facebook</a>
-                <div class="tab-slider"></div>
-              </div>
-            </div>
-
-            <div class="hero-visualization card card-glass" aria-live="polite">
-              <div class="insight-header">
-                <div>
-                  <p class="eyebrow">Engagement Pulse</p>
-                  <h3>Steady weekend momentum</h3>
-                </div>
-                <span class="status-pill live">Live</span>
-              </div>
-              <div class="insight-body">
-                <div class="metric-block">
-                  <div class="metric-label">Engagement rate</div>
-                  <div class="metric-value">4.8%</div>
-                  <div class="metric-trend positive">+1.2% vs last 7d</div>
-                </div>
-                <div class="mini-chart" aria-hidden="true">
-                  <canvas id="engagement-trend" width="240" height="100"></canvas>
-                </div>
-              </div>
-              <div class="insight-grid">
-                <div class="insight-pill">
-                  <div class="pill-label">Refresh cadence</div>
-                  <div class="pill-value">Auto · 5 min</div>
-                </div>
-                <div class="insight-pill split">
-                  <div class="pill-label">Platform split</div>
-                  <div class="pill-bar" aria-hidden="true">
-                    <span class="bar instagram"></span>
-                    <span class="bar facebook"></span>
-                  </div>
-                  <div class="pill-meta">
-                    <span>IG —</span>
-                    <span>FB —</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="stats-grid" aria-live="polite">
-            <article class="stat-card" id="stat-instagram">
-              <div class="stat-label">Instagram Posts</div>
-              <div class="stat-value" data-count="314">0</div>
-              <div class="stat-trend">
-                <canvas id="instagram-trend" width="100" height="30"></canvas>
-                <span class="trend-indicator positive">+12%</span>
-              </div>
-              <p class="stat-footnote">Posts and media count</p>
-            </article>
-            <article class="stat-card" id="stat-facebook">
-              <div class="stat-label">Facebook Followers</div>
-              <div class="stat-value" data-count="2400">0</div>
-              <div class="stat-trend">
-                <canvas id="facebook-trend" width="100" height="30"></canvas>
-                <span class="trend-indicator positive">+8%</span>
-              </div>
-              <p class="stat-footnote">80+ reviews · 90% recommend</p>
-            </article>
-            <article class="stat-card total" id="stat-total">
-              <div class="stat-label">Community Total</div>
+    <div class="main-content">
+      <header class="hero">
+        <div class="hero-grid">
+          <div class="hero-copy hero-community">
+            <p class="eyebrow">AlphaPulse for Furniture Distributors</p>
+            <h1>Our community heartbeat, live</h1>
+            <p class="tagline">Watch your audience grow in real time and nudge shoppers to scan the QR for next steps.</p>
+            <article class="stat-card total hero-total" id="stat-total" aria-live="polite">
+              <div class="stat-label">Community total</div>
               <div class="stat-value" data-count="2700">0</div>
               <div class="stat-progress">
                 <div class="progress-ring">
@@ -111,10 +35,39 @@
               </div>
               <p class="stat-footnote" id="last-updated"></p>
             </article>
+            <a class="btn btn-primary btn-lg hero-cta" href="#qr-panel">Scan for sale alerts or leave a review</a>
           </div>
-        </header>
 
-        <main class="dashboard">
+          <aside class="qr-panel" id="qr-panel">
+            <h2>Scan &amp; Stay Connected</h2>
+            <p>Scan to get sale alerts or leave a review.</p>
+            <img src="https://fwaimages.blob.core.windows.net/s36/homepage/qrcode_www.furnituredistributors.net.png" alt="Unified QR code for Furniture Distributors connect page">
+          </aside>
+        </div>
+
+        <div class="stats-grid" aria-live="polite">
+          <article class="stat-card" id="stat-instagram">
+            <div class="stat-label">Instagram Posts</div>
+            <div class="stat-value" data-count="314">0</div>
+            <div class="stat-trend">
+              <canvas id="instagram-trend" width="100" height="30"></canvas>
+              <span class="trend-indicator positive">+12%</span>
+            </div>
+            <p class="stat-footnote">Posts and media count</p>
+          </article>
+          <article class="stat-card" id="stat-facebook">
+            <div class="stat-label">Facebook Followers</div>
+            <div class="stat-value" data-count="2400">0</div>
+            <div class="stat-trend">
+              <canvas id="facebook-trend" width="100" height="30"></canvas>
+              <span class="trend-indicator positive">+8%</span>
+            </div>
+            <p class="stat-footnote">80+ reviews · 90% recommend</p>
+          </article>
+        </div>
+      </header>
+
+      <main class="dashboard">
           <div class="dashboard-grid main-grid">
             <!-- Spotlight Section -->
             <section class="card card-glass spotlight">
@@ -188,11 +141,8 @@
       </div>
     </div>
 
-
-  </div>
-
   <div class="sparkle-trail" aria-hidden="true"></div>
-  <a class="support-ribbon" href="#qr-footer">Need the link? Scan the QR ↓</a>
+  <a class="support-ribbon" href="#qr-panel">Need the link? Scan the QR ↓</a>
 
   <script>
     // Inline API credentials for kiosk/static use
