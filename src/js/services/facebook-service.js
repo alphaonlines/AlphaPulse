@@ -9,6 +9,7 @@ export class FacebookService {
     this.fallbackData = {
       pageInfo: {
         fan_count: 2400,
+        followers_count: 2425,
         name: 'Furniture Distributors'
       },
       posts: [

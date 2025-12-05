@@ -81,12 +81,11 @@ export class DashboardManager {
         : 'Live Graph API data';
 
       // Update follower count
-      if (data.pageInfo.fan_count) {
-        const facebookElement = document.querySelector('#stat-facebook .stat-value');
-        if (facebookElement) {
-          facebookElement.setAttribute('data-count', data.pageInfo.fan_count);
-          this.counterManager.updateCounter(facebookElement, data.pageInfo.fan_count);
-        }
+      const facebookFollowers = this.getFacebookFollowers(data.pageInfo);
+      const facebookElement = document.querySelector('#stat-facebook .stat-value');
+      if (facebookElement) {
+        facebookElement.setAttribute('data-count', facebookFollowers);
+        this.counterManager.updateCounter(facebookElement, facebookFollowers);
       }
 
       this.facebookPostsRaw = data.posts || [];
@@ -208,6 +207,10 @@ export class DashboardManager {
 
   getInstagramFollowers(userInfo = {}) {
     return userInfo.followers_count || userInfo.followers || userInfo.media_count || 0;
+  }
+
+  getFacebookFollowers(pageInfo = {}) {
+    return pageInfo.followers_count || pageInfo.fan_count || 0;
   }
 
   refreshLikeHistory() {
