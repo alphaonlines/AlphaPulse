@@ -12,7 +12,6 @@ export class TabSwitcher {
 
     this.facebookSections = [
       document.getElementById('stat-facebook'),
-      document.getElementById('spotlight-card'),
       document.querySelector('.community')
     ].filter(Boolean);
 

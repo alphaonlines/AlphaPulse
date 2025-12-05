@@ -17,6 +17,10 @@ export class DashboardManager {
     this.dataViz = new DataVisualization();
 
     this.latestPosts = [];
+    this.facebookPostsRaw = [];
+    this.instagramMediaRaw = [];
+    this.likesHistory = [];
+    this.likeWindowDays = 14;
     this.refreshInterval = null;
     this.tabRotationInterval = null;
     this.isInitialized = false;
@@ -63,9 +67,7 @@ export class DashboardManager {
 
     try {
       this.loadingStates.setGlobalLoading(true);
-      this.loadingStates.setLoadingState('spotlight-card', true);
       this.loadingStates.setLoadingState('latest-grid', true);
-      this.loadingStates.setLoadingState('leaderboard-list', true);
 
       const data = await this.facebookService.getAllData();
 
@@ -82,26 +84,24 @@ export class DashboardManager {
         }
       }
 
+      this.facebookPostsRaw = data.posts || [];
+
       // Update total community count
       this.updateTotalCount();
 
       // Update sections if we have posts
       if (data.posts.length > 0) {
-        this.updateSpotlightCard(data.posts[0], 'facebook');
         const facebookPosts = this.transformFacebookPosts(data.posts);
         this.mergeLatestPosts(facebookPosts, 'facebook');
-        this.updateLeaderboard(data.posts);
       }
 
-      this.loadingStates.setLoadingState('spotlight-card', false);
+      this.refreshLikeHistory();
+
       this.loadingStates.setLoadingState('latest-grid', false);
-      this.loadingStates.setLoadingState('leaderboard-list', false);
 
     } catch (error) {
       errorHandler.handle(error, 'Facebook data');
-      this.loadingStates.setErrorState('spotlight-card', 'Unable to load Facebook data');
       this.loadingStates.setErrorState('latest-grid', 'Unable to load Facebook posts');
-      this.loadingStates.setErrorState('leaderboard-list', 'Unable to load Facebook interactions');
     } finally {
       this.loadingStates.setGlobalLoading(false, statusMessage);
     }
@@ -120,14 +120,15 @@ export class DashboardManager {
         statusMessage = 'Demo mode: showing sample Instagram data';
       }
       
-      // Update media count (Instagram doesn't provide follower count via Basic Display API)
-      if (data.userInfo.media_count) {
-        const instagramElement = document.querySelector('#stat-instagram .stat-value');
-        if (instagramElement) {
-          instagramElement.setAttribute('data-count', data.userInfo.media_count);
-          this.counterManager.updateCounter(instagramElement, data.userInfo.media_count);
-        }
+      // Update follower count (fall back to media count if follower data is unavailable)
+      const instagramFollowers = this.getInstagramFollowers(data.userInfo);
+      const instagramElement = document.querySelector('#stat-instagram .stat-value');
+      if (instagramElement) {
+        instagramElement.setAttribute('data-count', instagramFollowers);
+        this.counterManager.updateCounter(instagramElement, instagramFollowers);
       }
+
+      this.instagramMediaRaw = data.media || [];
 
       // Update total community count
       this.updateTotalCount();
@@ -138,6 +139,8 @@ export class DashboardManager {
         this.mergeLatestPosts(instagramPosts, 'instagram');
       }
 
+      this.refreshLikeHistory();
+
     } catch (error) {
       errorHandler.handle(error, 'Instagram data');
     } finally {
@@ -146,95 +149,23 @@ export class DashboardManager {
     }
   }
 
-  updateSpotlightCard(post, platform) {
-    const spotlightCard = document.getElementById('spotlight-card');
-    if (!spotlightCard) return;
-
-    const interactions = this.facebookService.calculateInteractions(post);
-    
-    spotlightCard.innerHTML = `
-      <div class="spotlight-media">
-        <img src="${post.full_picture || 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80'}" alt="Spotlight Post">
-        <div class="spotlight-overlay"></div>
-      </div>
-      <div class="spotlight-content">
-        <span class="platform-pill">${platform}</span>
-        <h3>Furniture Distributors</h3>
-        <p>${post.message || 'Discover the latest updates and stories from Furniture Distributors, your trusted partner in quality furniture solutions.'}</p>
-        <div class="latest-metrics">
-          <div class="metric">
-            <span>❤️</span>
-            <span>${post.likes?.summary?.total_count || 0}</span>
-          </div>
-          <div class="metric">
-            <span>💬</span>
-            <span>${post.comments?.summary?.total_count || 0}</span>
-          </div>
-          <div class="metric">
-            <span>🔄</span>
-            <span>${post.shares?.count || 0}</span>
-          </div>
-        </div>
-        <div class="spotlight-actions">
-          <a href="${this.facebookService.generatePostUrl(post.id)}" target="_blank" class="btn btn-primary">View Post</a>
-          <a href="#" class="btn btn-secondary">Share</a>
-        </div>
-      </div>
-    `;
-  }
-
-  updateLeaderboard(posts) {
-    const leaderboardList = document.getElementById('leaderboard-list');
-    if (!leaderboardList) return;
-
-    leaderboardList.innerHTML = '';
-
-    const sortedPosts = [...posts].sort((a, b) => {
-      const interactionsA = this.facebookService.calculateInteractions(a);
-      const interactionsB = this.facebookService.calculateInteractions(b);
-      return interactionsB - interactionsA;
-    });
-
-    sortedPosts.slice(0, 5).forEach((post, index) => {
-      const interactions = this.facebookService.calculateInteractions(post);
-      const postDate = new Date(post.created_time);
-      
-      const listItem = document.createElement('li');
-      listItem.classList.add('leaderboard-item');
-      
-      // Determine rank class
-      let rankClass = 'default';
-      if (index === 0) rankClass = 'gold';
-      else if (index === 1) rankClass = 'silver';
-      else if (index === 2) rankClass = 'bronze';
-      
-      listItem.innerHTML = `
-        <div class="leaderboard-rank ${rankClass}">${index + 1}</div>
-        <div class="leaderboard-content">
-          <h4>${post.message ? post.message.substring(0, 60) + '...' : 'Furniture Distributors Post'}</h4>
-          <p>${timeFormatter.timeAgo(postDate)}</p>
-        </div>
-        <div class="leaderboard-meta">
-          <div class="leaderboard-interactions">${interactions}</div>
-          <div class="leaderboard-platform">Facebook</div>
-        </div>
-      `;
-      leaderboardList.appendChild(listItem);
-    });
-  }
-
   updateTotalCount() {
     const instagramElement = document.querySelector('#stat-instagram .stat-value');
     const facebookElement = document.querySelector('#stat-facebook .stat-value');
     const totalElement = document.querySelector('#stat-total .stat-value');
+    const followerTotalElement = document.getElementById('follower-total');
 
     if (instagramElement && facebookElement && totalElement) {
       const instagramCount = parseInt(instagramElement.getAttribute('data-count')) || 0;
       const facebookCount = parseInt(facebookElement.getAttribute('data-count')) || 0;
       const total = instagramCount + facebookCount;
-      
+
       totalElement.setAttribute('data-count', total);
       this.counterManager.updateCounter(totalElement, total);
+
+      if (followerTotalElement) {
+        followerTotalElement.textContent = total.toLocaleString();
+      }
 
       this.updatePlatformSplit(instagramCount, facebookCount);
 
@@ -267,6 +198,65 @@ export class DashboardManager {
     if (fbBar) fbBar.style.width = `${fbPercent}%`;
     if (igLabel) igLabel.textContent = `IG ${igPercent}%`;
     if (fbLabel) fbLabel.textContent = `FB ${fbPercent}%`;
+  }
+
+  getInstagramFollowers(userInfo = {}) {
+    return userInfo.followers_count || userInfo.followers || userInfo.media_count || 0;
+  }
+
+  refreshLikeHistory() {
+    const now = new Date();
+    const dayMs = 24 * 60 * 60 * 1000;
+    const timeline = Array.from({ length: this.likeWindowDays }, () => 0);
+
+    const bucketLikes = (timestamp, likes) => {
+      if (!timestamp) return;
+      const dayDiff = Math.floor((now - new Date(timestamp)) / dayMs);
+
+      if (dayDiff >= 0 && dayDiff < this.likeWindowDays) {
+        const bucketIndex = this.likeWindowDays - 1 - dayDiff;
+        timeline[bucketIndex] += likes;
+      }
+    };
+
+    this.facebookPostsRaw.forEach(post => {
+      const likes = post.likes?.summary?.total_count || 0;
+      bucketLikes(post.created_time, likes);
+    });
+
+    this.instagramMediaRaw.forEach(media => {
+      const likes = media.like_count || 0;
+      bucketLikes(media.timestamp, likes);
+    });
+
+    this.likesHistory = timeline;
+    this.updateLikesSummary(timeline);
+    this.dataViz.renderLikesChart(timeline);
+  }
+
+  updateLikesSummary(timeline) {
+    if (!timeline.length) return;
+
+    const totalLikes = timeline.reduce((sum, value) => sum + value, 0);
+    const averageLikes = totalLikes / timeline.length;
+    const peakLikes = Math.max(...timeline);
+    const latestLikes = timeline[timeline.length - 1];
+
+    const averageElement = document.getElementById('likes-average');
+    const peakElement = document.getElementById('likes-peak');
+    const latestElement = document.getElementById('likes-latest');
+
+    if (averageElement) {
+      averageElement.textContent = averageLikes.toFixed(1);
+    }
+
+    if (peakElement) {
+      peakElement.textContent = peakLikes.toLocaleString();
+    }
+
+    if (latestElement) {
+      latestElement.textContent = latestLikes.toLocaleString();
+    }
   }
 
   updateTimestamp() {
