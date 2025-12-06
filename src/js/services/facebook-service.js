@@ -67,7 +67,7 @@ export class FacebookService {
     }
   }
 
-  async getPosts(limit = 3) {
+  async getPosts(limit = 10) {
     try {
       const response = await fetch(API_ENDPOINTS.FACEBOOK_POSTS(this.pageId, this.accessToken, limit));
       
@@ -92,7 +92,7 @@ export class FacebookService {
       console.info('Fetching live Facebook data from Graph API...');
       const [pageInfo, postsData] = await Promise.all([
         this.getPageInfo(),
-        this.getPosts()
+        this.getPosts(12)
       ]);
 
       return {

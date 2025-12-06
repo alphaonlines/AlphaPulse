@@ -159,7 +159,7 @@ export class DataVisualization {
         this.createProgressRing(chart.ctx.canvas, newData, chart.color);
         break;
       case 'bar':
-        this.createBarChart(chart.ctx.canvas, newData, chart.color);
+        this.createBarChart(chart.ctx.canvas, newData, chart.color, chart.options);
         break;
       default:
         break;
@@ -216,39 +216,69 @@ export class DataVisualization {
     if (this.charts.has(likesCanvas.id)) {
       this.updateChart(likesCanvas.id, data);
     } else {
-      this.createBarChart(likesCanvas, data, this.colors.accent);
+      this.createBarChart(likesCanvas, data, this.colors.accent, {
+        highlightBarIndex: data.length - 1,
+        averageLineColor: this.colors.primary
+      });
     }
   }
 
-  createBarChart(canvas, data, color) {
+  createBarChart(canvas, data, color, options = {}) {
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
+
+    const {
+      highlightBarIndex = -1,
+      averageLineColor = color,
+      gridColor = '#E5E7EB',
+      labelColor = '#6B7280'
+    } = options;
 
     if (!data.length) return;
 
     ctx.clearRect(0, 0, width, height);
 
-    const max = Math.max(5, ...data);
-    const padding = 16;
-    const barWidth = (width - padding * 2) / data.length - 4;
+    const max = Math.ceil(Math.max(5, ...data) / 5) * 5;
+    const padding = 22;
+    const barWidth = (width - padding * 2) / data.length - 6;
+    const chartHeight = height - padding * 2;
 
-    // Draw baseline
-    ctx.beginPath();
-    ctx.moveTo(padding, height - padding);
-    ctx.lineTo(width - padding, height - padding);
-    ctx.strokeStyle = '#E5E7EB';
-    ctx.lineWidth = 1;
-    ctx.stroke();
+    // Draw grid lines and y-axis labels
+    ctx.strokeStyle = gridColor;
+    ctx.fillStyle = labelColor;
+    ctx.font = '12px "Inter", system-ui, -apple-system, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+
+    const gridLines = 4;
+    for (let i = 0; i <= gridLines; i++) {
+      const y = padding + (chartHeight / gridLines) * i;
+      const value = Math.round(max - (max / gridLines) * i);
+
+      ctx.beginPath();
+      ctx.moveTo(padding, y);
+      ctx.lineTo(width - padding, y);
+      ctx.lineWidth = i === gridLines ? 1.5 : 1;
+      ctx.setLineDash(i === gridLines ? [] : [4, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      if (i < gridLines) {
+        ctx.fillText(value.toString(), 4, y);
+      }
+    }
 
     data.forEach((value, index) => {
-      const x = padding + index * (barWidth + 4);
-      const barHeight = (value / max) * (height - padding * 2);
+      const x = padding + index * (barWidth + 6);
+      const barHeight = (value / max) * chartHeight;
       const y = height - padding - barHeight;
 
+      const isHighlight = index === highlightBarIndex;
+      const barColor = isHighlight ? this.colors.success : color;
       const gradient = ctx.createLinearGradient(0, y, 0, height - padding);
-      gradient.addColorStop(0, color);
-      gradient.addColorStop(1, color + '80');
+      gradient.addColorStop(0, barColor);
+      gradient.addColorStop(1, barColor + '80');
 
       ctx.fillStyle = gradient;
       ctx.beginPath();
@@ -258,8 +288,34 @@ export class DataVisualization {
         ctx.rect(x, y, barWidth, barHeight);
       }
       ctx.fill();
+
+      // Draw minimal x-axis labels every few days
+      if (data.length <= 14 ? index % 3 === 0 || index === data.length - 1 : index % 4 === 0) {
+        const daysAgo = data.length - 1 - index;
+        const label = daysAgo === 0 ? 'Today' : `${daysAgo}d`;
+        ctx.fillStyle = labelColor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(label, x + barWidth / 2, height - padding + 6);
+      }
     });
 
-    this.charts.set(canvas.id, { ctx, data, color, width, height, type: 'bar' });
+    // Draw average line across bars
+    const average = data.reduce((sum, value) => sum + value, 0) / data.length;
+    const avgY = height - padding - (average / max) * chartHeight;
+
+    ctx.strokeStyle = averageLineColor;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(padding, avgY);
+    ctx.lineTo(width - padding, avgY);
+    ctx.stroke();
+
+    ctx.fillStyle = averageLineColor;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(`Avg ${average.toFixed(0)}`, width - 6, avgY - 4);
+
+    this.charts.set(canvas.id, { ctx, data, color, width, height, type: 'bar', options });
   }
 }
