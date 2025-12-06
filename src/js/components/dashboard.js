@@ -215,12 +215,17 @@ export class DashboardManager {
 
   refreshLikeHistory() {
     const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const dayMs = 24 * 60 * 60 * 1000;
     const timeline = Array.from({ length: this.likeWindowDays }, () => 0);
 
     const bucketLikes = (timestamp, likes) => {
       if (!timestamp) return;
-      const dayDiff = Math.floor((now - new Date(timestamp)) / dayMs);
+      const date = new Date(timestamp);
+      if (Number.isNaN(date.getTime())) return;
+
+      const postDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const dayDiff = Math.floor((today - postDay) / dayMs);
 
       if (dayDiff >= 0 && dayDiff < this.likeWindowDays) {
         const bucketIndex = this.likeWindowDays - 1 - dayDiff;
