@@ -6,6 +6,8 @@ export class InstagramService {
     this.userId = API_CONFIG.INSTAGRAM_USER_ID;
     this.hasCredentials = Boolean(this.accessToken && this.userId);
 
+    const dayInMs = 24 * 60 * 60 * 1000;
+
     this.fallbackData = {
       userInfo: {
         id: 'demo-instagram-user',
@@ -21,7 +23,7 @@ export class InstagramService {
           media_type: 'IMAGE',
           media_url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80',
           permalink: 'https://www.instagram.com/p/demo1',
-          timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+          timestamp: new Date(Date.now() - 2 * dayInMs).toISOString(),
           like_count: 180,
           comments_count: 22
         },
@@ -31,7 +33,7 @@ export class InstagramService {
           media_type: 'IMAGE',
           media_url: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80',
           permalink: 'https://www.instagram.com/p/demo2',
-          timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+          timestamp: new Date(Date.now() - 5 * dayInMs).toISOString(),
           like_count: 142,
           comments_count: 18
         }
