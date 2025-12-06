@@ -6,6 +6,8 @@ export class FacebookService {
     this.pageId = API_CONFIG.FACEBOOK_PAGE_ID;
     this.hasCredentials = Boolean(this.accessToken && this.pageId);
 
+    const dayInMs = 24 * 60 * 60 * 1000;
+
     this.fallbackData = {
       pageInfo: {
         fan_count: 2400,
@@ -16,7 +18,7 @@ export class FacebookService {
         {
           id: '95489941835_1',
           message: 'Cozy up your living room with our new modular sectionals — crafted for comfort and built to last.',
-          created_time: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          created_time: new Date(Date.now() - 1 * dayInMs).toISOString(),
           full_picture: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80',
           likes: { summary: { total_count: 86 } },
           comments: { summary: { total_count: 14 } },
@@ -25,7 +27,7 @@ export class FacebookService {
         {
           id: '95489941835_2',
           message: 'Weekend delivery window is open! Schedule a slot and we’ll bring the showroom to you.',
-          created_time: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+          created_time: new Date(Date.now() - 3 * dayInMs).toISOString(),
           full_picture: 'https://images.unsplash.com/photo-1484100356142-db6ab6244067?auto=format&fit=crop&w=800&q=80',
           likes: { summary: { total_count: 64 } },
           comments: { summary: { total_count: 8 } },
@@ -34,7 +36,7 @@ export class FacebookService {
         {
           id: '95489941835_3',
           message: 'Thank you to the Greenville community for the incredible response to our new bedroom collection.',
-          created_time: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+          created_time: new Date(Date.now() - 6 * dayInMs).toISOString(),
           full_picture: 'https://images.unsplash.com/photo-1484100356142-db6ab6244067?auto=format&fit=crop&w=800&q=80',
           likes: { summary: { total_count: 52 } },
           comments: { summary: { total_count: 11 } },
